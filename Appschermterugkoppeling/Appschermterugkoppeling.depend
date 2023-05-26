@@ -17,3 +17,15 @@
 	<util/delay.h>
 	"LCDenBluetooth.h"
 
+1685096535 source:c:\users\aldar\onedrive\documents\github\project_agv\appschermterugkoppeling\fuse.c
+	<avr/io.h>
+
+1685096535 source:c:\users\aldar\onedrive\documents\github\project_agv\appschermterugkoppeling\lcdenbluetooth.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	<avr/interrupt.h>
+	"LCDenBluetooth.h"
+
+1685096535 c:\users\aldar\onedrive\documents\github\project_agv\appschermterugkoppeling\lcdenbluetooth.h
+
