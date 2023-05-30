@@ -12,8 +12,8 @@ itoa(variabele, array, 10); hiermee kan je variabelen omzetten naar strings -- m
 #include <avr/interrupt.h>
 #include "LCDscherm.h"
 
-int pulsUS1 = 0;
-int pulsUS2 = 0;
+int pulsrechts = 0;
+int pulslinks = 0;
 int i = 0;
 int x = 0;
 int ultrateller = 0;
@@ -37,7 +37,7 @@ ISR(INT0_vect)
     if(i == 1)
     {
         TCCR1B = 0;
-        pulsUS1 = TCNT1;
+        pulsrechts = TCNT1;
         TCNT1 = 0;
         i = 0;
     }
@@ -53,7 +53,7 @@ ISR(INT1_vect)
     if(x == 1)
     {
         TCCR3B = 0;
-        pulsUS2 = TCNT3;
+        pulslinks = TCNT3;
         TCNT3 = 0;
         x = 0;
     }
@@ -70,10 +70,11 @@ int main(void)
     sei();
 
     init_LCDscherm();
-    char arrayUS1[16];
-    char arrayUS2[16];
-    int lengteUS1 = 0;
-    int lengteUS2 = 0;
+    char arrayrechts[16];
+    char arraylinks[16];
+    int lengterechts = 0;
+    int lengtelinks = 0;
+    int getal = 3;
 
     while(1)
     {
@@ -83,22 +84,59 @@ int main(void)
         PORTB &= ~(1<<PB4);
         PORTB &= ~(1<<PB5);
 
-        lengteUS1 = pulsUS1 * 0.01071875;
-        lengteUS2 = pulsUS2 * 0.01071875;
-        itoa(lengteUS1, arrayUS1, 10);
-        itoa(lengteUS2, arrayUS2, 10);
+        lengterechts = pulsrechts * 0.01071875;
+        lengtelinks = pulslinks * 0.01071875;
+        itoa(lengterechts, arrayrechts, 10);
+        itoa(lengtelinks, arraylinks, 10);
 
-        LCD_Naar_Locatie(1, 1);
-        Stuur_LCD_String("A1 = ");
+        switch(getal)
+        {
+        case 1://naar links(te dichtbij rechts)
+            //Motoren naar links
+            LCD_Naar_Locatie(1, 1);
+            Stuur_LCD_String("Naar links");
+            if(((lengtelinks >= 50) || (lengtelinks <= 0)) && ((lengterechts >= 50) || (lengterechts <= 0)))
+            {
+                getal = 3;
 
-        LCD_Naar_Locatie(6, 1);
-        Stuur_LCD_String(arrayUS1);
+            }
+            break;
+        case 2://naar rechts(te dichtbij links)
+            //Motoren naar rechts
+            LCD_Naar_Locatie(1, 1);
+            Stuur_LCD_String("Naar rechts");
+            if(((lengtelinks >= 50) || (lengtelinks <= 0)) && ((lengterechts >= 50) || (lengterechts <= 0)))
+            {
+                getal = 3;
 
+            }
+            break;
+        case 3://rechtdoor
+            //Motoren naar rechtdoor
+            LCD_Naar_Locatie(1, 1);
+            Stuur_LCD_String("Rechtdoor");
+            if((lengterechts <= 50) && (lengterechts >= 0))
+            {
+                getal = 1;
+
+            }
+            else if((lengtelinks <= 50) && (lengtelinks >= 0))
+            {
+                getal = 2;
+            }
+            break;
+        }
         LCD_Naar_Locatie(1, 2);
-        Stuur_LCD_String("A2 = ");
+        Stuur_LCD_String("A1 ");
 
-        LCD_Naar_Locatie(6, 2);
-        Stuur_LCD_String(arrayUS2);
+        LCD_Naar_Locatie(4, 2);
+        Stuur_LCD_String(arrayrechts);
+
+        LCD_Naar_Locatie(8, 2);
+        Stuur_LCD_String("A2 ");
+
+        LCD_Naar_Locatie(11, 2);
+        Stuur_LCD_String(arraylinks);
 
         _delay_ms(10);
         LCD_Scherm_Leeg();
