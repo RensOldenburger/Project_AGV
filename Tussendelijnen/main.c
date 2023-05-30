@@ -170,7 +170,7 @@ int main(void)
         PORTB &= ~(1<<PB4);
         PORTB &= ~(1<<PB5);
 
-        if((lengtelinks <= 50) && (lengtelinks >= 0))
+        if((lengtelinks <= 120) && (lengtelinks >= 0))
         {
             PORT |= (1 << PIN12);
             PORT &= ~(1 << PIN11);
@@ -181,7 +181,7 @@ int main(void)
 //            Stuur_LCD_String("naar links");
 
         }
-        else if((lengterechts <= 50) && (lengterechts >= 0))
+        else if((lengterechts <= 120) && (lengterechts >= 0))
         {
             PORT &= ~(1 << PIN12);
             PORT |= (1 << PIN11);

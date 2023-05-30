@@ -27,7 +27,7 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  11 .debug_str    000006e1  00000000  00000000  00005668  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 12 .debug_line_str 00000190  00000000  00000000  00005d49  2**0
+ 12 .debug_line_str 000001a8  00000000  00000000  00005d49  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -172,6 +172,12 @@ Disassembly of section .text:
      126:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 0000012a <init_LCDscherm>:
+void Check_LCD_isbezig(void);
+void LCD_Aan_Uit(void);
+void Stuur_LCD_Character(unsigned char LCD_character);
+
+void init_LCDscherm(void)
+{
      12a:	0f 93       	push	r16
      12c:	1f 93       	push	r17
      12e:	cf 93       	push	r28
@@ -187,6 +193,7 @@ Disassembly of section .text:
      142:	cd bf       	out	0x3d, r28	; 61
 
 00000144 <.Loc.1>:
+    DataDir_LCDControl |= (1 << LCDEnable) | (1 << ReadWrite) | (1 << LCDRS);//Data directory register goed zetten
      144:	8a e0       	ldi	r24, 0x0A	; 10
      146:	91 e0       	ldi	r25, 0x01	; 1
      148:	dc 01       	movw	r26, r24
@@ -512,9 +519,13 @@ Disassembly of section .text:
 	...
 
 00000344 <.L9>:
+    _delay_ms(15);//delay moet volgens datasheet
+
+    LCD_Scherm_Leeg();
      344:	0e 94 a9 06 	call	0xd52	; 0xd52 <LCD_Scherm_Leeg>
 
 00000348 <.Loc.19>:
+    Stuur_LCD_Opdracht(0x38);//opdracht voor LCD in 8bit mode
      348:	88 e3       	ldi	r24, 0x38	; 56
      34a:	0e 94 20 06 	call	0xc40	; 0xc40 <Stuur_LCD_Opdracht>
      34e:	80 e0       	ldi	r24, 0x00	; 0
@@ -990,6 +1001,8 @@ Disassembly of section .text:
 	...
 
 0000062a <.L25>:
+    _delay_us(50);//delay moet volgens datasheet
+    Stuur_LCD_Opdracht(0b00001100);//scherm een beetje aanpassen
      62a:	8c e0       	ldi	r24, 0x0C	; 12
      62c:	0e 94 20 06 	call	0xc40	; 0xc40 <Stuur_LCD_Opdracht>
      630:	80 e0       	ldi	r24, 0x00	; 0
@@ -1457,6 +1470,8 @@ Disassembly of section .text:
 	...
 
 0000091a <.L41>:
+    _delay_us(50);//delay moet volgens datasheet
+}
      91a:	00 00       	nop
      91c:	ce 54       	subi	r28, 0x4E	; 78
      91e:	df 4f       	sbci	r29, 0xFF	; 255
@@ -1472,12 +1487,16 @@ Disassembly of section .text:
      932:	08 95       	ret
 
 00000934 <Check_LCD_isbezig>:
+
+void Check_LCD_isbezig(void)//wachten tot LCD informatie kan opnemen
+{
      934:	cf 93       	push	r28
      936:	df 93       	push	r29
      938:	cd b7       	in	r28, 0x3d	; 61
      93a:	de b7       	in	r29, 0x3e	; 62
 
 0000093c <.Loc.81>:
+    DataDir_LCDpoort = 0;
      93c:	87 e2       	ldi	r24, 0x27	; 39
      93e:	90 e0       	ldi	r25, 0x00	; 0
 
@@ -1486,6 +1505,7 @@ Disassembly of section .text:
      942:	10 82       	st	Z, r1
 
 00000944 <.Loc.83>:
+    LCDControl |= (1 << ReadWrite);
      944:	8b e0       	ldi	r24, 0x0B	; 11
      946:	91 e0       	ldi	r25, 0x01	; 1
      948:	fc 01       	movw	r30, r24
@@ -1499,6 +1519,7 @@ Disassembly of section .text:
      954:	20 83       	st	Z, r18
 
 00000956 <.Loc.85>:
+    LCDControl &= ~(1 << LCDRS);
      956:	8b e0       	ldi	r24, 0x0B	; 11
      958:	91 e0       	ldi	r25, 0x01	; 1
      95a:	fc 01       	movw	r30, r24
@@ -1514,12 +1535,17 @@ Disassembly of section .text:
      966:	20 83       	st	Z, r18
 
 00000968 <.Loc.88>:
+
+    while(LCDpoort >= 0x80)
      968:	02 c0       	rjmp	.+4      	; 0x96e <.L67>
 
 0000096a <.L68>:
+    {
+        LCD_Aan_Uit();
      96a:	0e 94 c6 04 	call	0x98c	; 0x98c <LCD_Aan_Uit>
 
 0000096e <.L67>:
+    while(LCDpoort >= 0x80)
      96e:	88 e2       	ldi	r24, 0x28	; 40
      970:	90 e0       	ldi	r25, 0x00	; 0
      972:	fc 01       	movw	r30, r24
@@ -1530,6 +1556,9 @@ Disassembly of section .text:
      978:	c4 f3       	brlt	.-16     	; 0x96a <.L68>
 
 0000097a <.Loc.92>:
+    }
+
+    DataDir_LCDpoort = 0xFF;
      97a:	87 e2       	ldi	r24, 0x27	; 39
      97c:	90 e0       	ldi	r25, 0x00	; 0
 
@@ -1539,12 +1568,16 @@ Disassembly of section .text:
      982:	20 83       	st	Z, r18
 
 00000984 <.Loc.94>:
+}
      984:	00 00       	nop
      986:	df 91       	pop	r29
      988:	cf 91       	pop	r28
      98a:	08 95       	ret
 
 0000098c <LCD_Aan_Uit>:
+
+void LCD_Aan_Uit(void)//LCD(enable) snel aan en uit zetten
+{
      98c:	cf 93       	push	r28
      98e:	df 93       	push	r29
      990:	cd b7       	in	r28, 0x3d	; 61
@@ -1558,6 +1591,7 @@ Disassembly of section .text:
      9a0:	cd bf       	out	0x3d, r28	; 61
 
 000009a2 <.Loc.96>:
+    LCDControl |= 1 << (LCDEnable);
      9a2:	8b e0       	ldi	r24, 0x0B	; 11
      9a4:	91 e0       	ldi	r25, 0x01	; 1
      9a6:	dc 01       	movw	r26, r24
@@ -1963,6 +1997,8 @@ Disassembly of section .text:
 	...
 
 00000c18 <.L85>:
+    _delay_us(50);
+    LCDControl &= ~(1 << LCDEnable);
      c18:	8b e0       	ldi	r24, 0x0B	; 11
      c1a:	91 e0       	ldi	r25, 0x01	; 1
      c1c:	dc 01       	movw	r26, r24
@@ -1978,6 +2014,7 @@ Disassembly of section .text:
      c28:	20 83       	st	Z, r18
 
 00000c2a <.Loc.130>:
+}
      c2a:	00 00       	nop
      c2c:	c8 5b       	subi	r28, 0xB8	; 184
      c2e:	df 4f       	sbci	r29, 0xFF	; 255
@@ -1991,6 +2028,9 @@ Disassembly of section .text:
      c3e:	08 95       	ret
 
 00000c40 <Stuur_LCD_Opdracht>:
+
+void Stuur_LCD_Opdracht(unsigned char LCD_opdracht)//opdracht naar de LCD sturen
+{
      c40:	cf 93       	push	r28
      c42:	df 93       	push	r29
      c44:	0f 92       	push	r0
@@ -1999,9 +2039,11 @@ Disassembly of section .text:
      c4a:	89 83       	std	Y+1, r24	; 0x01
 
 00000c4c <.Loc.132>:
+    Check_LCD_isbezig();
      c4c:	0e 94 9a 04 	call	0x934	; 0x934 <Check_LCD_isbezig>
 
 00000c50 <.Loc.133>:
+    LCDpoort = LCD_opdracht;
      c50:	88 e2       	ldi	r24, 0x28	; 40
      c52:	90 e0       	ldi	r25, 0x00	; 0
 
@@ -2011,6 +2053,7 @@ Disassembly of section .text:
      c58:	20 83       	st	Z, r18
 
 00000c5a <.Loc.135>:
+    LCDControl &= ~((1 << ReadWrite) | (1 << LCDRS));
      c5a:	8b e0       	ldi	r24, 0x0B	; 11
      c5c:	91 e0       	ldi	r25, 0x01	; 1
      c5e:	fc 01       	movw	r30, r24
@@ -2026,9 +2069,11 @@ Disassembly of section .text:
      c6a:	20 83       	st	Z, r18
 
 00000c6c <.Loc.138>:
+    LCD_Aan_Uit();
      c6c:	0e 94 c6 04 	call	0x98c	; 0x98c <LCD_Aan_Uit>
 
 00000c70 <.Loc.139>:
+    LCDpoort = 0;
      c70:	88 e2       	ldi	r24, 0x28	; 40
      c72:	90 e0       	ldi	r25, 0x00	; 0
 
@@ -2037,6 +2082,7 @@ Disassembly of section .text:
      c76:	10 82       	st	Z, r1
 
 00000c78 <.Loc.141>:
+}
      c78:	00 00       	nop
      c7a:	0f 90       	pop	r0
      c7c:	df 91       	pop	r29
@@ -2044,6 +2090,9 @@ Disassembly of section .text:
      c80:	08 95       	ret
 
 00000c82 <Stuur_LCD_Character>:
+
+void Stuur_LCD_Character(unsigned char LCD_character)//character naar de LCD sturen
+{
      c82:	cf 93       	push	r28
      c84:	df 93       	push	r29
      c86:	0f 92       	push	r0
@@ -2052,9 +2101,11 @@ Disassembly of section .text:
      c8c:	89 83       	std	Y+1, r24	; 0x01
 
 00000c8e <.Loc.143>:
+    Check_LCD_isbezig();
      c8e:	0e 94 9a 04 	call	0x934	; 0x934 <Check_LCD_isbezig>
 
 00000c92 <.Loc.144>:
+    LCDpoort = LCD_character;
      c92:	88 e2       	ldi	r24, 0x28	; 40
      c94:	90 e0       	ldi	r25, 0x00	; 0
 
@@ -2064,6 +2115,7 @@ Disassembly of section .text:
      c9a:	20 83       	st	Z, r18
 
 00000c9c <.Loc.146>:
+    LCDControl &= ~(1 << ReadWrite);
      c9c:	8b e0       	ldi	r24, 0x0B	; 11
      c9e:	91 e0       	ldi	r25, 0x01	; 1
      ca0:	fc 01       	movw	r30, r24
@@ -2079,6 +2131,7 @@ Disassembly of section .text:
      cac:	20 83       	st	Z, r18
 
 00000cae <.Loc.149>:
+    LCDControl |= (1 << LCDRS);
      cae:	8b e0       	ldi	r24, 0x0B	; 11
      cb0:	91 e0       	ldi	r25, 0x01	; 1
      cb2:	fc 01       	movw	r30, r24
@@ -2092,9 +2145,11 @@ Disassembly of section .text:
      cbe:	20 83       	st	Z, r18
 
 00000cc0 <.Loc.151>:
+    LCD_Aan_Uit();
      cc0:	0e 94 c6 04 	call	0x98c	; 0x98c <LCD_Aan_Uit>
 
 00000cc4 <.Loc.152>:
+    LCDpoort = 0;
      cc4:	88 e2       	ldi	r24, 0x28	; 40
      cc6:	90 e0       	ldi	r25, 0x00	; 0
 
@@ -2103,6 +2158,7 @@ Disassembly of section .text:
      cca:	10 82       	st	Z, r1
 
 00000ccc <.Loc.154>:
+}
      ccc:	00 00       	nop
      cce:	0f 90       	pop	r0
      cd0:	df 91       	pop	r29
@@ -2110,6 +2166,9 @@ Disassembly of section .text:
      cd4:	08 95       	ret
 
 00000cd6 <Stuur_LCD_String>:
+
+void Stuur_LCD_String(char *stringcharacters)//dit is zodat je characters in string kunnen sturen
+{
      cd6:	cf 93       	push	r28
      cd8:	df 93       	push	r29
      cda:	0f 92       	push	r0
@@ -2120,9 +2179,12 @@ Disassembly of section .text:
      ce4:	89 83       	std	Y+1, r24	; 0x01
 
 00000ce6 <.Loc.156>:
+    while(*stringcharacters > 0)
      ce6:	0b c0       	rjmp	.+22     	; 0xcfe <.L99>
 
 00000ce8 <.L100>:
+    {
+        Stuur_LCD_Character(*stringcharacters++);
      ce8:	89 81       	ldd	r24, Y+1	; 0x01
      cea:	9a 81       	ldd	r25, Y+2	; 0x02
      cec:	9c 01       	movw	r18, r24
@@ -2139,6 +2201,7 @@ Disassembly of section .text:
      cfa:	0e 94 41 06 	call	0xc82	; 0xc82 <Stuur_LCD_Character>
 
 00000cfe <.L99>:
+    while(*stringcharacters > 0)
      cfe:	89 81       	ldd	r24, Y+1	; 0x01
      d00:	9a 81       	ldd	r25, Y+2	; 0x02
      d02:	fc 01       	movw	r30, r24
@@ -2152,6 +2215,8 @@ Disassembly of section .text:
      d0a:	74 f7       	brge	.-36     	; 0xce8 <.L100>
 
 00000d0c <.Loc.162>:
+    }
+}
      d0c:	00 00       	nop
      d0e:	00 00       	nop
      d10:	0f 90       	pop	r0
@@ -2161,6 +2226,9 @@ Disassembly of section .text:
      d18:	08 95       	ret
 
 00000d1a <LCD_Naar_Locatie>:
+
+void LCD_Naar_Locatie(uint8_t x, uint8_t y)//opdracht voor cursor verplaatsing maken
+{
      d1a:	cf 93       	push	r28
      d1c:	df 93       	push	r29
      d1e:	0f 92       	push	r0
@@ -2171,6 +2239,7 @@ Disassembly of section .text:
      d28:	6a 83       	std	Y+2, r22	; 0x02
 
 00000d2a <.Loc.164>:
+    Stuur_LCD_Opdracht(0x80 + LCD_Pos_Eerste_Vakje[y-1] + (x-1));
      d2a:	8a 81       	ldd	r24, Y+2	; 0x02
      d2c:	88 2f       	mov	r24, r24
      d2e:	90 e0       	ldi	r25, 0x00	; 0
@@ -2192,6 +2261,7 @@ Disassembly of section .text:
      d42:	0e 94 20 06 	call	0xc40	; 0xc40 <Stuur_LCD_Opdracht>
 
 00000d46 <.Loc.168>:
+}
      d46:	00 00       	nop
      d48:	0f 90       	pop	r0
      d4a:	0f 90       	pop	r0
@@ -2200,6 +2270,9 @@ Disassembly of section .text:
      d50:	08 95       	ret
 
 00000d52 <LCD_Scherm_Leeg>:
+
+void LCD_Scherm_Leeg(void)//Maakt het scherm leeg
+{
      d52:	cf 93       	push	r28
      d54:	df 93       	push	r29
      d56:	cd b7       	in	r28, 0x3d	; 61
@@ -2212,6 +2285,7 @@ Disassembly of section .text:
      d64:	cd bf       	out	0x3d, r28	; 61
 
 00000d66 <.Loc.170>:
+    Stuur_LCD_Opdracht(0x01);//Leeg scherm 0x01
      d66:	81 e0       	ldi	r24, 0x01	; 1
      d68:	0e 94 20 06 	call	0xc40	; 0xc40 <Stuur_LCD_Opdracht>
      d6c:	80 e0       	ldi	r24, 0x00	; 0
@@ -2402,6 +2476,8 @@ Disassembly of section .text:
 	...
 
 00000e8a <.L110>:
+    _delay_ms(2);//altijd 2ms delay na scherm leegmaken
+}
      e8a:	00 00       	nop
      e8c:	a2 96       	adiw	r28, 0x22	; 34
      e8e:	0f b6       	in	r0, 0x3f	; 63
@@ -3915,10 +3991,10 @@ int main(void)
 
 000016f8 <.Loc.154>:
 
-        if((lengtelinks <= 50) && (lengtelinks >= 0))
+        if((lengtelinks <= 120) && (lengtelinks >= 0))
     16f8:	8b 81       	ldd	r24, Y+3	; 0x03
     16fa:	9c 81       	ldd	r25, Y+4	; 0x04
-    16fc:	82 33       	cpi	r24, 0x32	; 50
+    16fc:	88 37       	cpi	r24, 0x78	; 120
     16fe:	91 05       	cpc	r25, r1
     1700:	09 f0       	breq	.+2      	; 0x1704 <.Loc.155>
 
@@ -3999,10 +4075,10 @@ int main(void)
 //            Stuur_LCD_String("naar links");
 
         }
-        else if((lengterechts <= 50) && (lengterechts >= 0))
+        else if((lengterechts <= 120) && (lengterechts >= 0))
     1756:	89 81       	ldd	r24, Y+1	; 0x01
     1758:	9a 81       	ldd	r25, Y+2	; 0x02
-    175a:	82 33       	cpi	r24, 0x32	; 50
+    175a:	88 37       	cpi	r24, 0x78	; 120
     175c:	91 05       	cpc	r25, r1
     175e:	09 f0       	breq	.+2      	; 0x1762 <.Loc.167>
 

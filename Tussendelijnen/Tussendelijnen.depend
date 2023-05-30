@@ -29,3 +29,14 @@
 
 1685098086 c:\github dingen\project_agv\tussendelijnen\lcdscherm.h
 
+1685096537 source:c:\users\aldar\onedrive\documents\github\project_agv\tussendelijnen\fuse.c
+	<avr/io.h>
+
+1685096536 source:c:\users\aldar\onedrive\documents\github\project_agv\tussendelijnen\lcdscherm.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	"LCDscherm.h"
+
+1685096537 c:\users\aldar\onedrive\documents\github\project_agv\tussendelijnen\lcdscherm.h
+
