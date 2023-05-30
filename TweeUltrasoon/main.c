@@ -15,10 +15,13 @@ itoa(variabele, array, 10); hiermee kan je variabelen omzetten naar strings -- m
 int pulsUS1 = 0;
 int pulsUS2 = 0;
 int i = 0;
+int x = 0;
+int ultrateller = 0;
 
 void initding()
 {
     TCCR1B |= (1<<CS10);//no prescaler
+    TCCR3B |= (1<<CS30);//no prescaler
     DDRB |= (1 << PB4);
     DDRB |= (1 << PB5);
 
@@ -45,6 +48,22 @@ ISR(INT0_vect)
     }
 }
 
+ISR(INT1_vect)
+{
+    if(x == 1)
+    {
+        TCCR3B = 0;
+        pulsUS2 = TCNT3;
+        TCNT3 = 0;
+        x = 0;
+    }
+    if(x == 0)
+    {
+        TCCR3B |= (1<<CS30);
+        x = 1;
+    }
+}
+
 int main(void)
 {
     initding();
@@ -59,8 +78,10 @@ int main(void)
     while(1)
     {
         PORTB |= (1<<PB4);
+        PORTB |= (1<<PB5);
         _delay_us(15);
         PORTB &= ~(1<<PB4);
+        PORTB &= ~(1<<PB5);
 
         lengteUS1 = pulsUS1 * 0.01071875;
         lengteUS2 = pulsUS2 * 0.01071875;
