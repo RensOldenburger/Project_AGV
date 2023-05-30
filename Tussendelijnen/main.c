@@ -163,7 +163,7 @@ int main(void)
 
 //        itoa(lengterechts, arrayrechts, 10);
 //        itoa(lengtelinks, arraylinks, 10);
-
+//   hahaufdhauioefhowehj;
         PORTB |= (1<<PB4);
         PORTB |= (1<<PB5);
         _delay_us(15);

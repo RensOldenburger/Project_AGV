@@ -18,3 +18,14 @@
 	<avr/interrupt.h>
 	"LCDscherm.h"
 
+1685098086 source:c:\github dingen\project_agv\tussendelijnen\fuse.c
+	<avr/io.h>
+
+1685098086 source:c:\github dingen\project_agv\tussendelijnen\lcdscherm.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	"LCDscherm.h"
+
+1685098086 c:\github dingen\project_agv\tussendelijnen\lcdscherm.h
+
