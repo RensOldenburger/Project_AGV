@@ -25,8 +25,10 @@ int rechtsteller = 0;
 int pulslinks = 0;
 int linksteller = 0;
 
-void h_bridge_setr_percentage(signed char percentage);
-void h_bridge_setl_percentage(signed char percentage);
+int toestand = 0;
+
+void h_bridger_set_percentage(signed char percentage);
+void h_bridgel_set_percentage(signed char percentage);
 
 void initding()
 {
@@ -45,13 +47,13 @@ void initding()
     EICRA |= (1 << ISC10);
 
     //timer PWM motoren
-    TCCR0B = (0 << CS02) | (0 << CS01) | (1 << CS00);
-    TIMSK0 = (1 << OCIE0A) | (1 << TOIE0);
+    TCCR5B = (0 << CS52) | (0 << CS51) | (1 << CS50);
+    TIMSK5 = (1 << OCIE5A) | (1 << TOIE5);
 
-    OCR0A = 0;
+    OCR5A = 0;
 
     TCCR4B = (0 << CS42) | (0 << CS41) | (1 << CS40);
-    TIMSK0 = (1 << OCIE4A) | (1 << TOIE4);
+    TIMSK4 = (1 << OCIE4A) | (1 << TOIE4);
 
     OCR4A = 0;
 
@@ -105,13 +107,13 @@ ISR(INT1_vect)
 }
 
 //H-brug PWM rechts
-ISR(TIMER0_OVF_vect)
+ISR(TIMER5_OVF_vect)
 {
     PORT ^= (1 << PEN1);
 
 }
 //H-brug PWM rechts
-ISR(TIMER0_COMPA_vect)
+ISR(TIMER5_COMPA_vect)
 {
     PORT |= (1 << PEN1);
 }
@@ -142,26 +144,26 @@ int main(void)
     {
 /*
 onderste is de rechterwiel
-vooruit
-            PORT |= (1 << PIN12);
-            PORT &= ~(1 << PIN11);
-            PORT &= ~(1 << PIN22);
-            PORT |= (1 << PIN21);
-achteruit
-            PORT |= (1 << PIN11);
-            PORT &= ~(1 << PIN12);
-            PORT &= ~(1 << PIN21);
-            PORT |= (1 << PIN22);
-rechts
-            PORT &= ~(1 << PIN12);
-            PORT |= (1 << PIN11);
-            PORT &= ~(1 << PIN22);
-            PORT |= (1 << PIN21);
-links
-            PORT |= (1 << PIN12);
-            PORT &= ~(1 << PIN11);
-            PORT |= (1 << PIN22);
-            PORT &= ~(1 << PIN21);
+    //vooruit
+    PORT &= ~(1 << PIN12);
+    PORT |= (1 << PIN11);
+    PORT |= (1 << PIN22);
+    PORT &= ~(1 << PIN21);
+    //achteruit
+    PORT |= (1 << PIN11);
+    PORT &= ~(1 << PIN12);
+    PORT &= ~(1 << PIN21);
+    PORT |= (1 << PIN22);
+    //rechts
+    PORT &= ~(1 << PIN12);
+    PORT |= (1 << PIN11);
+    PORT &= ~(1 << PIN22);
+    PORT |= (1 << PIN21);
+    //links
+    PORT |= (1 << PIN12);
+    PORT &= ~(1 << PIN11);
+    PORT |= (1 << PIN22);
+    PORT &= ~(1 << PIN21);
 */
         lengterechts = pulsrechts * 0.01071875;
         lengtelinks = pulslinks * 0.01071875;
@@ -172,45 +174,71 @@ links
         PORTB &= ~(1<<PB4);
         PORTB &= ~(1<<PB5);
 
-        if((lengtelinks <= 120) && (lengtelinks >= 0))
+        switch(toestand)
         {
-            PORT |= (1 << PIN12);
-            PORT &= ~(1 << PIN11);
-            PORT |= (1 << PIN22);
-            PORT &= ~(1 << PIN21);
+            case 0://zoeken naar baan
+                //motoren vooruit
+                PORT &= ~(1 << PIN12);
+                PORT |= (1 << PIN11);
+                PORT |= (1 << PIN22);
+                PORT &= ~(1 << PIN21);
+                if((lengtelinks <= 120) && (lengterechts <= 120))
+                {
+                    toestand = 1;
+                }
+                break;
+            case 1:
+                if((lengtelinks <= 70) && (lengtelinks >= 0))
+                {
+                    //rechts
+                    PORT |= (1 << PIN12);
+                    PORT &= ~(1 << PIN11);
+                    PORT |= (1 << PIN22);
+                    PORT &= ~(1 << PIN21);
+                    /*
+                    h_bridger_set_percentage(20);
+                    h_bridgel_set_percentage(5);
+                    */
+                }
+                else if((lengterechts <= 70) && (lengterechts >= 0))
+                {
+                    //links
+                    PORT &= ~(1 << PIN12);
+                    PORT |= (1 << PIN11);
+                    PORT &= ~(1 << PIN22);
+                    PORT |= (1 << PIN21);
+                    /*
+                    h_bridger_set_percentage(5);
+                    h_bridgel_set_percentage(20);
+                    */
+                }
+                else if(((lengterechts <= 300) && (lengterechts >= 120)) && ((lengtelinks <= 300) && (lengtelinks >= 120)))
+                {
+                    //vooruit
+                    PORT &= ~(1 << PIN12);
+                    PORT |= (1 << PIN11);
+                    PORT |= (1 << PIN22);
+                    PORT &= ~(1 << PIN21);
+                    /*
+                    h_bridger_set_percentage(10);
+                    h_bridgel_set_percentage(10);
+                    */
+                }
+                else
+                {
+                    toestand = 2;
+                }
+                break;
+            case 2:
+                    //vooruit
+                    PORT &= ~(1 << PIN12);
+                    PORT |= (1 << PIN11);
+                    PORT |= (1 << PIN22);
+                    PORT &= ~(1 << PIN21);
 
-        }
-        else if((lengterechts <= 120) && (lengterechts >= 0))
-        {
-            PORT &= ~(1 << PIN12);
-            PORT |= (1 << PIN11);
-            PORT &= ~(1 << PIN22);
-            PORT |= (1 << PIN21);
-        }
-        else if(lengterechts > 120)
-        {
-            h_bridger_set_percentage(10);
-            h_bridgel_set_percentage(10);
-            PORT |= (1 << PIN12);
-            PORT &= ~(1 << PIN11);
-            PORT &= ~(1 << PIN22);
-            PORT |= (1 << PIN21);
-        }
-        else if(lengtelinks > 120)
-        {
-            h_bridger_set_percentage(10);
-            h_bridgel_set_percentage(10);
-            PORT |= (1 << PIN12);
-            PORT &= ~(1 << PIN11);
-            PORT &= ~(1 << PIN22);
-            PORT |= (1 << PIN21);
-        }
-        else
-        {
-            PORT &= ~(1 << PIN11);
-            PORT |= (1 << PIN12);
-            PORT |= (1 << PIN21);
-            PORT &= ~(1 << PIN22);
+                    h_bridger_set_percentage(20);
+                    h_bridgel_set_percentage(5);
+                break;
         }
 
     }
@@ -222,7 +250,7 @@ void h_bridger_set_percentage(signed char percentage)
 {
 	if (percentage >= 0 && percentage <= 100)
 	{
-			OCR0A = (255*percentage)/100;
+			OCR5A = (255*percentage)/100;
 	}
 }
 
@@ -230,6 +258,6 @@ void h_bridgel_set_percentage(signed char percentage)
 {
 	if (percentage >= 0 && percentage <= 100)
 	{
-			OCR4A = (255*percentage)/100;
+			OCR4A = (65536*percentage)/100;
 	}
 }
