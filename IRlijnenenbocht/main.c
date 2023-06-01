@@ -10,7 +10,6 @@ itoa(variabele, array, 10); hiermee kan je variabelen omzetten naar strings -- m
 #include <stdlib.h>
 #include <math.h>
 #include <avr/interrupt.h>
-#include "LCDscherm.h"
 
 #define PEN1	PA7//digital 29
 #define PIN11	PA6//digital 28
@@ -80,11 +79,8 @@ int main(void)
 {
     initding();
     sei();
-    init_LCDscherm();
-    int getal = 3;
+    int getal = 0;
 
-    h_bridgeR_set_percentage(0);
-    h_bridgeL_set_percentage(0);
 /*
 //vooruit
         PORT |= (1 << PIN12);
@@ -110,111 +106,75 @@ int main(void)
 
     while(1)
     {
-        if((PINB & (1 << PB7)) && (PINB & (1 << PB6)))
-        {
-            getal = 4;
-        }
         switch(getal)
         {
-        case 1://naar links(te dichtbij rechts)
-            //Motoren naar links
-            h_bridgeR_set_percentage(50);
-            h_bridgeL_set_percentage(70);
-            LCD_Naar_Locatie(1, 1);
-            Stuur_LCD_String("Naar links");
-            if(((PINB & (1 << PB7)) == 0) && ((PINB & (1 << PB6)) == 0))
-            {
-                getal = 3;
-
-            }
-            break;
-        case 2://naar rechts(te dichtbij links)
-            //Motoren naar rechts
-            h_bridgeR_set_percentage(70);
-            h_bridgeL_set_percentage(50);
-            LCD_Naar_Locatie(1, 1);
-            Stuur_LCD_String("Naar rechts");
-            if(((PINB & (1 << PB7)) == 0) && ((PINB & (1 << PB6)) == 0))
-            {
-                getal = 3;
-
-            }
-            break;
-        case 3://rechtdoor
-            //Motoren naar rechtdoor
-            h_bridgeR_set_percentage(70);
-            h_bridgeL_set_percentage(70);
-            LCD_Naar_Locatie(1, 1);
-            Stuur_LCD_String("Rechtdoor");
+        case 0://begin state
+            h_bridgeR_set_percentage(80);
+            h_bridgeL_set_percentage(80);
             PORT |= (1 << PIN12);
             PORT &= ~(1 << PIN11);
             PORT &= ~(1 << PIN22);
             PORT |= (1 << PIN21);
+            if(((PINB & (1 << PB7)) == 0) && ((PINB & (1 << PB6)) == 0))
+            {
+                getal = 3;
+
+            }
+            break;
+        case 1://naar links(te dichtbij rechts)
+            //Motoren naar links
+            h_bridgeR_set_percentage(75);
+            h_bridgeL_set_percentage(85);
+            if(((PINB & (1 << PB7)) == 0) && ((PINB & (1 << PB6)) == 0))
+            {
+                getal = 3;
+            }
+            else if((PINB & (1 << PB7)) && (PINB & (1 << PB6)))
+            {
+                getal = 4;
+            }
+            break;
+        case 2://naar rechts(te dichtbij links)
+            //Motoren naar rechts
+            h_bridgeR_set_percentage(85);
+            h_bridgeL_set_percentage(75);
+            if(((PINB & (1 << PB7)) == 0) && ((PINB & (1 << PB6)) == 0))
+            {
+                getal = 3;
+            }
+            else if((PINB & (1 << PB7)) && (PINB & (1 << PB6)))
+            {
+                getal = 4;
+            }
+            break;
+        case 3://rechtdoor
+            //Motoren naar rechtdoor
+            h_bridgeR_set_percentage(80);
+            h_bridgeL_set_percentage(80);
             if(PINB & (1 << PB7))
             {
                 getal = 1;
-
             }
             else if(PINB & (1 << PB6))
             {
                 getal = 2;
             }
+            else if((PINB & (1 << PB7)) && (PINB & (1 << PB6)))
+            {
+                getal = 4;
+            }
             break;
-        case 4://stoppen niks in zicht
+        case 4://Rijstrook wisselen naar links
             //Motoren naar rechtdoor
-            h_bridgeR_set_percentage(99);
-            h_bridgeL_set_percentage(99);
-            LCD_Naar_Locatie(1, 1);
-            Stuur_LCD_String("STOP");
-            if((PINB & (1 << PB7)) && ((PINB & (1 << PB6)) == 0))
-            {
-                getal = 1;
-
-            }
-            else if((PINB & (1 << PB6)) && ((PINB & (1 << PB7)) == 0))
-            {
-                getal = 2;
-            }
-            else if(((PINB & (1 << PB6)) == 0) && ((PINB & (1 << PB7)) == 0))
+            h_bridgeR_set_percentage(72);
+            h_bridgeL_set_percentage(85);
+            if(((PINB & (1 << PB6)) == 0) && ((PINB & (1 << PB7)) == 0))
             {
                 getal = 3;
             }
             break;
         }
-        LCD_Naar_Locatie(1, 2);
-        Stuur_LCD_String("IR1");
 
-        LCD_Naar_Locatie(8, 2);
-        Stuur_LCD_String("IR2");
-
-        if(getal == 1)
-        {
-            LCD_Naar_Locatie(4, 2);
-            Stuur_LCD_String("AAN");
-
-            LCD_Naar_Locatie(11, 2);
-            Stuur_LCD_String("UIT");
-        }
-        else if(getal == 2)
-        {
-            LCD_Naar_Locatie(4, 2);
-            Stuur_LCD_String("UIT");
-
-            LCD_Naar_Locatie(11, 2);
-            Stuur_LCD_String("AAN");
-        }
-        else
-        {
-            LCD_Naar_Locatie(4, 2);
-            Stuur_LCD_String("UIT");
-
-            LCD_Naar_Locatie(11, 2);
-            Stuur_LCD_String("UIT");
-        }
-
-
-        _delay_ms(10);
-        LCD_Scherm_Leeg();
     }
 
     return 0;
