@@ -1,0 +1,20 @@
+# depslib dependency file v1.0
+1685620704 source:c:\users\aldar\onedrive\documents\github\project_agv\tussendelijnenv2\fuse.c
+	<avr/io.h>
+
+1685096536 source:c:\users\aldar\onedrive\documents\github\project_agv\tussendelijnenv2\lcdscherm.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	"LCDscherm.h"
+
+1685096537 c:\users\aldar\onedrive\documents\github\project_agv\tussendelijnenv2\lcdscherm.h
+
+1685621328 source:c:\users\aldar\onedrive\documents\github\project_agv\tussendelijnenv2\main.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	<math.h>
+	<avr/interrupt.h>
+	"LCDscherm.h"
+
