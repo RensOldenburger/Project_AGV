@@ -19,9 +19,20 @@ itoa(variabele, array, 10); hiermee kan je variabelen omzetten naar strings -- m
 #define PEN2	PA2//digital 24
 #define PORT    PORTA
 #define DDR     DDRA
+/*
+bij volle batterij
+80
+75
+85
+*/
+#define snelheidrechtdoor    70
+#define snelheidhard    65
+#define snelheidzacht   75
 
 void h_bridgeR_set_percentage(signed char percentage);
 void h_bridgeL_set_percentage(signed char percentage);
+
+int timerteller = 0;
 
 void initding()
 {
@@ -35,6 +46,9 @@ void initding()
     TIMSK3 = (1 << OCIE3A) | (1 << TOIE3);
 
     OCR3A = 0;
+
+    //timer doorrijden
+    TIMSK0 |= (1 << TOIE0);
 
     //pinout h-brug
     DDR |= (1 << PEN1);
@@ -75,11 +89,17 @@ ISR(TIMER3_COMPA_vect)
     PORT |= (1 << PEN2);
 }
 
+//Timer doorrijden
+ISR(TIMER0_OVF_vect)
+{
+    timerteller ++;
+}
+
 int main(void)
 {
     initding();
     sei();
-    int getal = 0;
+    int toestand = 0;
 
 /*
 //vooruit
@@ -106,71 +126,76 @@ int main(void)
 
     while(1)
     {
-        switch(getal)
+        switch(toestand)
         {
         case 0://begin state
-            h_bridgeR_set_percentage(80);
-            h_bridgeL_set_percentage(80);
+            h_bridgeR_set_percentage(snelheidrechtdoor);
+            h_bridgeL_set_percentage(snelheidrechtdoor);
             PORT |= (1 << PIN11);
-            PORT &= ~(1 << PIN12);
+            PORT &= ~(1 << PIN12) ;
             PORT &= ~(1 << PIN21);
             PORT |= (1 << PIN22);
             if(((PINB & (1 << PB7)) == 0) && ((PINB & (1 << PB6)) == 0))
             {
-                getal = 3;
+                toestand = 3;
 
             }
             break;
         case 1://naar links(te dichtbij rechts)
             //Motoren naar links
-            h_bridgeR_set_percentage(75);
-            h_bridgeL_set_percentage(85);
+            h_bridgeR_set_percentage(snelheidhard);
+            h_bridgeL_set_percentage(snelheidzacht);
             if(((PINB & (1 << PB7)) == 0) && ((PINB & (1 << PB6)) == 0))
             {
-                getal = 3;
+                toestand = 3;
             }
             else if((PINB & (1 << PB7)) && (PINB & (1 << PB6)))
             {
-                getal = 4;
+                toestand = 4;
             }
             break;
         case 2://naar rechts(te dichtbij links)
             //Motoren naar rechts
-            h_bridgeR_set_percentage(85);
-            h_bridgeL_set_percentage(75);
+            h_bridgeR_set_percentage(snelheidzacht);
+            h_bridgeL_set_percentage(snelheidhard);
             if(((PINB & (1 << PB7)) == 0) && ((PINB & (1 << PB6)) == 0))
             {
-                getal = 3;
+                toestand = 3;
             }
             else if((PINB & (1 << PB7)) && (PINB & (1 << PB6)))
             {
-                getal = 4;
+                toestand = 4;
             }
             break;
         case 3://rechtdoor
             //Motoren naar rechtdoor
-            h_bridgeR_set_percentage(80);
-            h_bridgeL_set_percentage(80);
+            h_bridgeR_set_percentage(snelheidrechtdoor);
+            h_bridgeL_set_percentage(snelheidrechtdoor);
             if(PINB & (1 << PB7))
             {
-                getal = 1;
+                toestand = 1;
             }
             else if(PINB & (1 << PB6))
             {
-                getal = 2;
+                toestand = 2;
             }
             else if((PINB & (1 << PB7)) && (PINB & (1 << PB6)))
             {
-                getal = 4;
+                toestand = 4;
             }
             break;
         case 4://Rijstrook wisselen naar links
-            //Motoren naar rechtdoor
-            h_bridgeR_set_percentage(85);
-            h_bridgeL_set_percentage(72);
-            if(((PINB & (1 << PB6)) == 0) && ((PINB & (1 << PB7)) == 0))
+            TCCR0B = (1 << CS02) | (0 << CS01) | (1 << CS00);
+            if(timerteller == 15000)//een seconde zijn voorbij
             {
-                getal = 3;
+                timerteller = 0;
+                TCCR0B = 0;
+                h_bridgeR_set_percentage(snelheidhard);
+                h_bridgeL_set_percentage(snelheidzacht);
+                if(((PINB & (1 << PB6)) == 0) && ((PINB & (1 << PB7)) == 0))
+                {
+                    toestand = 3;
+                }
             }
             break;
         }

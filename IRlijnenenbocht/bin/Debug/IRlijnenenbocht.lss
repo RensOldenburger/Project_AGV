@@ -697,7 +697,7 @@ int main(void)
  3ec:	0e 94 30 03 	call	0x660	; 0x660 <h_bridgeL_set_percentage>
 
 000003f0 <.Loc.67>:
-            PORT |= (1 << PIN12);
+            PORT |= (1 << PIN11);
  3f0:	82 e2       	ldi	r24, 0x22	; 34
  3f2:	90 e0       	ldi	r25, 0x00	; 0
  3f4:	fc 01       	movw	r30, r24
@@ -706,12 +706,12 @@ int main(void)
  3fa:	90 e0       	ldi	r25, 0x00	; 0
 
 000003fc <.Loc.68>:
- 3fc:	20 62       	ori	r18, 0x20	; 32
+ 3fc:	20 64       	ori	r18, 0x40	; 64
  3fe:	fc 01       	movw	r30, r24
  400:	20 83       	st	Z, r18
 
 00000402 <.Loc.69>:
-            PORT &= ~(1 << PIN11);
+            PORT &= ~(1 << PIN12);
  402:	82 e2       	ldi	r24, 0x22	; 34
  404:	90 e0       	ldi	r25, 0x00	; 0
  406:	fc 01       	movw	r30, r24
@@ -722,12 +722,12 @@ int main(void)
  40c:	90 e0       	ldi	r25, 0x00	; 0
 
 0000040e <.Loc.71>:
- 40e:	2f 7b       	andi	r18, 0xBF	; 191
+ 40e:	2f 7d       	andi	r18, 0xDF	; 223
  410:	fc 01       	movw	r30, r24
  412:	20 83       	st	Z, r18
 
 00000414 <.Loc.72>:
-            PORT &= ~(1 << PIN22);
+            PORT &= ~(1 << PIN21);
  414:	82 e2       	ldi	r24, 0x22	; 34
  416:	90 e0       	ldi	r25, 0x00	; 0
  418:	fc 01       	movw	r30, r24
@@ -738,12 +738,12 @@ int main(void)
  41e:	90 e0       	ldi	r25, 0x00	; 0
 
 00000420 <.Loc.74>:
- 420:	27 7f       	andi	r18, 0xF7	; 247
+ 420:	2f 7e       	andi	r18, 0xEF	; 239
  422:	fc 01       	movw	r30, r24
  424:	20 83       	st	Z, r18
 
 00000426 <.Loc.75>:
-            PORT |= (1 << PIN21);
+            PORT |= (1 << PIN22);
  426:	82 e2       	ldi	r24, 0x22	; 34
  428:	90 e0       	ldi	r25, 0x00	; 0
  42a:	fc 01       	movw	r30, r24
@@ -752,7 +752,7 @@ int main(void)
  430:	90 e0       	ldi	r25, 0x00	; 0
 
 00000432 <.Loc.76>:
- 432:	20 61       	ori	r18, 0x10	; 16
+ 432:	28 60       	ori	r18, 0x08	; 8
  434:	fc 01       	movw	r30, r24
  436:	20 83       	st	Z, r18
 
@@ -1112,13 +1112,13 @@ int main(void)
 00000598 <.L7>:
         case 4://Rijstrook wisselen naar links
             //Motoren naar rechtdoor
-            h_bridgeR_set_percentage(72);
- 598:	88 e4       	ldi	r24, 0x48	; 72
+            h_bridgeR_set_percentage(85);
+ 598:	85 e5       	ldi	r24, 0x55	; 85
  59a:	0e 94 f1 02 	call	0x5e2	; 0x5e2 <h_bridgeR_set_percentage>
 
 0000059e <.Loc.135>:
-            h_bridgeL_set_percentage(85);
- 59e:	85 e5       	ldi	r24, 0x55	; 85
+            h_bridgeL_set_percentage(72);
+ 59e:	88 e4       	ldi	r24, 0x48	; 72
  5a0:	0e 94 30 03 	call	0x660	; 0x660 <h_bridgeL_set_percentage>
 
 000005a4 <.Loc.136>:
