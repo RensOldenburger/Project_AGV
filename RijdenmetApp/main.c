@@ -149,10 +149,16 @@ int main(void)
 
     while(1)
     {
-        if(((IRregister & (1<<IRbakrechts)) == 0) || ((IRregister & (1<<IRbaklinks)) == 0))
-        {
-            toestand = 5;
-        }
+//                    h_bridgeR_set_percentage(snelheidrechtdoor);
+//            h_bridgeL_set_percentage(snelheidrechtdoor);
+//            PORT |= (1 << PIN11);
+//            PORT &= ~(1 << PIN12) ;
+//            PORT &= ~(1 << PIN21);
+//            PORT |= (1 << PIN22);
+//        if(((IRregister & (1<<IRbakrechts)) == 0) || ((IRregister & (1<<IRbaklinks)) == 0))
+//        {
+//            toestand = 5;
+//        }
         switch(toestand)
         {
         case 0://begin state

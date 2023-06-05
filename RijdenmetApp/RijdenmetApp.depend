@@ -1,0 +1,20 @@
+# depslib dependency file v1.0
+1685824488 source:c:\users\aldar\onedrive\documents\github\project_agv\rijdenmetapp\fuse.c
+	<avr/io.h>
+
+1685954612 source:c:\users\aldar\onedrive\documents\github\project_agv\rijdenmetapp\main.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	<math.h>
+	<avr/interrupt.h>
+
+1685224251 source:c:\users\aldar\onedrive\documents\github\project_agv\rijdenmetapp\bluetooth.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	<avr/interrupt.h>
+	"Bluetooth.h"
+
+1685224099 c:\users\aldar\onedrive\documents\github\project_agv\rijdenmetapp\bluetooth.h
+

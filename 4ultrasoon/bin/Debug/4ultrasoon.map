@@ -724,24 +724,24 @@ END GROUP
  *(.debug_addr)
 
 .debug_line_str
-                0x0000000000000000      0x169
+                0x0000000000000000      0x187
  *(.debug_line_str)
  .debug_line_str
-                0x0000000000000000       0x66 obj\Debug\fuse.o
-                                         0x96 (size before relaxing)
+                0x0000000000000000       0x84 obj\Debug\fuse.o
+                                         0xd2 (size before relaxing)
  .debug_line_str
-                0x0000000000000066       0x94 obj\Debug\LCDscherm.o
-                                         0xf0 (size before relaxing)
+                0x0000000000000084       0x94 obj\Debug\LCDscherm.o
+                                        0x12c (size before relaxing)
  .debug_line_str
-                0x00000000000000fa       0x1c obj\Debug\main.o
-                                         0xf6 (size before relaxing)
+                0x0000000000000118       0x1c obj\Debug\main.o
+                                        0x132 (size before relaxing)
  .debug_line_str
-                0x0000000000000116       0x53 c:/program files (x86)/avr-gcc-12.0.1/bin/../lib/gcc/avr/12.1.0/avr6\libgcc.a(_exit.o)
+                0x0000000000000134       0x53 c:/program files (x86)/avr-gcc-12.0.1/bin/../lib/gcc/avr/12.1.0/avr6\libgcc.a(_exit.o)
                                          0x5f (size before relaxing)
  .debug_line_str
-                0x0000000000000169       0x5f c:/program files (x86)/avr-gcc-12.0.1/bin/../lib/gcc/avr/12.1.0/avr6\libgcc.a(_copy_data.o)
+                0x0000000000000187       0x5f c:/program files (x86)/avr-gcc-12.0.1/bin/../lib/gcc/avr/12.1.0/avr6\libgcc.a(_copy_data.o)
  .debug_line_str
-                0x0000000000000169       0x5f c:/program files (x86)/avr-gcc-12.0.1/bin/../lib/gcc/avr/12.1.0/avr6\libgcc.a(_clear_bss.o)
+                0x0000000000000187       0x5f c:/program files (x86)/avr-gcc-12.0.1/bin/../lib/gcc/avr/12.1.0/avr6\libgcc.a(_clear_bss.o)
 
 .debug_loclists
  *(.debug_loclists)

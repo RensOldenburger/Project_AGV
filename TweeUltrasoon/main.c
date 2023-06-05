@@ -30,6 +30,8 @@ void initding()
 
     EIMSK |= (1 << INT1);
     EICRA |= (1 << ISC10);
+
+    DDRH |= (1 << PH6);
 }
 
 ISR(INT0_vect)
@@ -105,6 +107,7 @@ int main(void)
             //Motoren naar rechts
             LCD_Naar_Locatie(1, 1);
             Stuur_LCD_String("Naar rechts");
+            PORTH |= (1<<PH6);
             if(((lengtelinks >= 50) || (lengtelinks <= 0)) && ((lengterechts >= 50) || (lengterechts <= 0)))
             {
                 getal = 3;
@@ -115,6 +118,7 @@ int main(void)
             //Motoren naar rechtdoor
             LCD_Naar_Locatie(1, 1);
             Stuur_LCD_String("Rechtdoor");
+            PORTH &= ~(1<<PH6);
             if((lengterechts <= 50) && (lengterechts >= 0))
             {
                 getal = 1;
