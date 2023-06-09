@@ -40,9 +40,9 @@ bij volle batterij
 75
 85
 */
-#define snelheidrechtdoor    70
-#define snelheidhard    65
-#define snelheidzacht   75
+#define snelheidrechtdoor    30
+#define snelheidhard    35
+#define snelheidzacht   25
 
 void h_bridgeR_set_percentage(signed char percentage);
 void h_bridgeL_set_percentage(signed char percentage);
@@ -247,6 +247,7 @@ int main(void)
             }
             toestand = 3;
             break;
+
         }
 
     }

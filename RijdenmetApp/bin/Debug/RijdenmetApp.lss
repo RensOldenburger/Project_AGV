@@ -998,12 +998,12 @@ int main(void)
         {
         case 0://begin state
             h_bridgeR_set_percentage(snelheidrechtdoor);
- 550:	86 e4       	ldi	r24, 0x46	; 70
+ 550:	8e e1       	ldi	r24, 0x1E	; 30
  552:	0e 94 8f 05 	call	0xb1e	; 0xb1e <h_bridgeR_set_percentage>
 
 00000556 <.Loc.81>:
             h_bridgeL_set_percentage(snelheidrechtdoor);
- 556:	86 e4       	ldi	r24, 0x46	; 70
+ 556:	8e e1       	ldi	r24, 0x1E	; 30
  558:	0e 94 ce 05 	call	0xb9c	; 0xb9c <h_bridgeL_set_percentage>
 
 0000055c <.Loc.82>:
@@ -1117,12 +1117,12 @@ int main(void)
         case 1://naar links(te dichtbij rechts)
             //Motoren naar links
             h_bridgeR_set_percentage(snelheidhard);
- 5d2:	81 e4       	ldi	r24, 0x41	; 65
+ 5d2:	83 e2       	ldi	r24, 0x23	; 35
  5d4:	0e 94 8f 05 	call	0xb1e	; 0xb1e <h_bridgeR_set_percentage>
 
 000005d8 <.Loc.100>:
             h_bridgeL_set_percentage(snelheidzacht);
- 5d8:	8b e4       	ldi	r24, 0x4B	; 75
+ 5d8:	89 e1       	ldi	r24, 0x19	; 25
  5da:	0e 94 ce 05 	call	0xb9c	; 0xb9c <h_bridgeL_set_percentage>
 
 000005de <.Loc.101>:
@@ -1217,12 +1217,12 @@ int main(void)
         case 2://naar rechts(te dichtbij links)
             //Motoren naar rechts
             h_bridgeR_set_percentage(snelheidzacht);
- 636:	8b e4       	ldi	r24, 0x4B	; 75
+ 636:	89 e1       	ldi	r24, 0x19	; 25
  638:	0e 94 8f 05 	call	0xb1e	; 0xb1e <h_bridgeR_set_percentage>
 
 0000063c <.Loc.116>:
             h_bridgeL_set_percentage(snelheidhard);
- 63c:	81 e4       	ldi	r24, 0x41	; 65
+ 63c:	83 e2       	ldi	r24, 0x23	; 35
  63e:	0e 94 ce 05 	call	0xb9c	; 0xb9c <h_bridgeL_set_percentage>
 
 00000642 <.Loc.117>:
@@ -1377,12 +1377,12 @@ int main(void)
 
 000006e2 <.Loc.141>:
             h_bridgeR_set_percentage(snelheidrechtdoor);
- 6e2:	86 e4       	ldi	r24, 0x46	; 70
+ 6e2:	8e e1       	ldi	r24, 0x1E	; 30
  6e4:	0e 94 8f 05 	call	0xb1e	; 0xb1e <h_bridgeR_set_percentage>
 
 000006e8 <.Loc.142>:
             h_bridgeL_set_percentage(snelheidrechtdoor);
- 6e8:	86 e4       	ldi	r24, 0x46	; 70
+ 6e8:	8e e1       	ldi	r24, 0x1E	; 30
  6ea:	0e 94 ce 05 	call	0xb9c	; 0xb9c <h_bridgeL_set_percentage>
 
 000006ee <.Loc.143>:
@@ -1527,12 +1527,12 @@ int main(void)
 
 0000077c <.Loc.166>:
                 h_bridgeR_set_percentage(snelheidhard);
- 77c:	81 e4       	ldi	r24, 0x41	; 65
+ 77c:	83 e2       	ldi	r24, 0x23	; 35
  77e:	0e 94 8f 05 	call	0xb1e	; 0xb1e <h_bridgeR_set_percentage>
 
 00000782 <.Loc.167>:
                 h_bridgeL_set_percentage(snelheidzacht);
- 782:	8b e4       	ldi	r24, 0x4B	; 75
+ 782:	89 e1       	ldi	r24, 0x19	; 25
  784:	0e 94 ce 05 	call	0xb9c	; 0xb9c <h_bridgeL_set_percentage>
 
 00000788 <.Loc.168>:
