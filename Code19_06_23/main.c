@@ -55,9 +55,13 @@ int main(void)
                 toestand = 8;
             }
         }
-        if(waarde < 30)
+        if(waarde < 30)//voor ultrasoon ziet iets
         {
             toestand = 9;
+        }
+        if(((IRregister & (1 << IRonderlinks)) == 0) && ((IRregister & (1 << IRonderrechts)) == 0))//Einde rijstrook beide ir zien niks
+        {
+            toestand = 7;
         }
         switch(toestand)
         {
