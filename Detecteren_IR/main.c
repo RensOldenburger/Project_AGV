@@ -36,6 +36,12 @@
   Exit:     -
   Notes:    -
 */
+void LED_init (void)
+    {
+        DDRB |= (1<<PB7) | (1<<PB5);
+
+        PORTB &= ~(1<<PB7);
+    }
 void IR_init(void)
 {
     DDR_IR &= ~(1<<IR_L) & ~(1<<IR_R);      // eneble pins as input
@@ -62,6 +68,7 @@ void init(void)
 {
     IR_init();
     output_init();
+    LED_init();
 }
 
 /*...........................................................................
@@ -82,6 +89,7 @@ void output_aan(int aan)
         PORT_LED |= (1<<LED_2);         // LED 2 aan
         PORT_LED &= ~(1<<LED_1);        // LED 1 uit
         PORT_buzzer &= ~(1<<buzzer);    // buzzer uit
+        PORTB |= (1<<PB5);
         _delay_ms(1000);
     }
     else
