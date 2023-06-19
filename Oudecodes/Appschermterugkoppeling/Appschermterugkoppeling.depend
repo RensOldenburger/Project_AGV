@@ -1,0 +1,31 @@
+# depslib dependency file v1.0
+1684790181 source:d:\schoolv2\projectagv\appschermterugkoppeling\fuse.c
+	<avr/io.h>
+
+1684947704 source:d:\schoolv2\projectagv\appschermterugkoppeling\lcdenbluetooth.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	<avr/interrupt.h>
+	"LCDenBluetooth.h"
+
+1684947704 d:\schoolv2\projectagv\appschermterugkoppeling\lcdenbluetooth.h
+
+1684792799 source:d:\schoolv2\projectagv\appschermterugkoppeling\main.c
+	<avr/io.h>
+	<stdio.h>
+	<util/delay.h>
+	"LCDenBluetooth.h"
+
+1685096535 source:c:\users\aldar\onedrive\documents\github\project_agv\appschermterugkoppeling\fuse.c
+	<avr/io.h>
+
+1685096535 source:c:\users\aldar\onedrive\documents\github\project_agv\appschermterugkoppeling\lcdenbluetooth.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	<avr/interrupt.h>
+	"LCDenBluetooth.h"
+
+1685096535 c:\users\aldar\onedrive\documents\github\project_agv\appschermterugkoppeling\lcdenbluetooth.h
+
