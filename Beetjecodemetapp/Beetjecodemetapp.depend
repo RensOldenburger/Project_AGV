@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1686218930 source:d:\schoolv2\projectagv\beetjecodemetapp\main.c
+1687163092 source:d:\schoolv2\projectagv\beetjecodemetapp\main.c
 	<avr/io.h>
 	<util/delay.h>
 	<stdlib.h>
@@ -29,7 +29,7 @@
 
 1685916813 d:\schoolv2\projectagv\beetjecodemetapp\bluetooth.h
 
-1686219488 d:\schoolv2\projectagv\beetjecodemetapp\library.h
+1687162922 d:\schoolv2\projectagv\beetjecodemetapp\library.h
 
 1686217722 source:d:\schoolv2\projectagv\beetjecodemetapp\library.c
 	<avr/io.h>

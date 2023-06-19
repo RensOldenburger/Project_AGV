@@ -7,6 +7,11 @@
 #define IRbaklinks	    PB4
 #define IRregister	    PINB
 
+#define Voorultrasoontrig	    PB4
+#define Voorultrasoonecho	    PB4
+#define Ultraregister	    PINB
+#define UltraPort	    PORTB
+
 #define LED_1           PH4
 #define LED_2           PH5
 #define DDR_LED         DDRH
@@ -34,6 +39,7 @@ bij volle batterij: 80,75,85
 #define snelheidrechtdoor    20
 #define snelheidhard    45
 #define snelheidzacht   55
+#define snelheiduit  99
 
 void h_bridgeR_set_percentage(signed char percentage);
 void h_bridgeL_set_percentage(signed char percentage);

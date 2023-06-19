@@ -1,3 +1,4 @@
+#define F_CPU 16000000UL
 #include <avr/io.h>
 #include <util/delay.h>
 #include <stdlib.h>
@@ -5,6 +6,58 @@
 #include <avr/interrupt.h>
 #include "Bluetooth.h"
 #include "Library.h"
+
+volatile int count = 0;
+
+void initTimer(void){
+    Ultraregister |= (1<<Voorultrasoontrig);
+    UltraPort &= ~(1<<Voorultrasoontrig);
+    TCCR2A = 0;
+    TCCR2B |= (1<<CS20);
+    //16000000 / 256 = 62,500
+    //1 / 62500 = 0.000016s
+    //62500x/sec
+    TIMSK2 = (1<<TOIE2);
+    sei();
+}
+
+int GetDistance(void){
+
+    int Distance;
+
+    TriggerPulse();
+
+    while ((Ultraregister & (1<<Voorultrasoonecho)) == 0){
+
+    }
+    TCNT2 = 0;
+    TIFR2 = 1<<TOV2;
+    count = 0;
+
+    while ((Ultraregister & (1<<Voorultrasoonecho)) != 0){
+
+    }
+    Distance = count;
+
+    Distance = Distance * 0.008 * 343;
+
+    //340  m/s
+    //34 cm / ms
+    //340   mm / ms
+    //0.34  mm / us
+    //5.44 * count geeft distance in mm
+
+    return Distance;
+}
+
+void TriggerPulse (void){
+    UltraPort |= (1<<Voorultrasoontrig);
+    _delay_us(10);
+    UltraPort &= (~(1<<Voorultrasoontrig));
+}
+ISR(TIMER2_OVF_vect){
+    count++;
+}
 
 /*
 Bluetooth getallen:
@@ -22,12 +75,17 @@ int main(void)
 {
     init();
 
+    initTimer();
+    int waarde;
+
     int toestand = 0;
 
     DDRH |= (1 << PH6);
     PORTH &= ~(1<<PH6);
     while(1)
     {
+        waarde = GetDistance();
+
         if(Bluetooth_Getal == 2)//Bluetooth verbroken
         {
             toestand = 0;
@@ -40,6 +98,14 @@ int main(void)
 //        {
 //            toestand = 99;
 //        }
+        if(((IRregister & (1 << IRbaklinks)) == 0) || ((IRregister & (1 << IRbakrechts)) == 0))//Plantenbak gedetecteerd
+        {
+            toestand = 8;
+        }
+        if(waarde <= 30)//Voorultrasoon ziet object
+        {
+            toestand = 9;
+        }
         switch(toestand)
         {
         case 99://Noodtoestand
@@ -97,7 +163,6 @@ int main(void)
             if(((IRregister & (1 << IRonderrechts)) == 0) && ((IRregister & (1 << IRonderlinks)) == 0))
             {
                 toestand = 4;
-
             }
             break;
         case 4://Tussen de balken rechtdoor
@@ -147,7 +212,7 @@ int main(void)
                 toestand = 7;
             }
             break;
-        case 7://Balken niet meer in zicht
+        case 7://Balken niet meer in zicht en bocht maken
             _delay_ms(2000);
             h_bridgeR_set_percentage(snelheidhard);
             h_bridgeL_set_percentage(snelheidzacht);
@@ -156,8 +221,19 @@ int main(void)
                 toestand = 4;
             }
             break;
-        case 8:
-
+        case 8://signaleren
+            h_bridgeR_set_percentage(snelheiduit);
+            h_bridgeL_set_percentage(snelheiduit);
+            signaal_geven();
+            toestand = 4;
+            break;
+        case 9://Voorultrasoon ziet iets
+            h_bridgeR_set_percentage(snelheiduit);
+            h_bridgeL_set_percentage(snelheiduit);
+            if(waarde > 30)
+            {
+                toestand = 4;
+            }
             break;
         }
     }
