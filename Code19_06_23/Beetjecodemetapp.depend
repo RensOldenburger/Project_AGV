@@ -50,3 +50,12 @@
 1685909213 source:c:\users\aldar\onedrive\documents\github\project_agv\code19_06_23\fuse.c
 	<avr/io.h>
 
+1687206024 source:c:\users\aldar\onedrive\documents\github\project_agv\code19_06_23\library.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	<avr/interrupt.h>
+	"Library.h"
+
+1687186374 c:\users\aldar\onedrive\documents\github\project_agv\code19_06_23\library.h
+

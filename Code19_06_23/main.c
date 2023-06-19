@@ -55,6 +55,10 @@ int main(void)
                 toestand = 8;
             }
         }
+        if(waarde < 30)
+        {
+            toestand = 9;
+        }
         switch(toestand)
         {
         case 99://Noodtoestand
