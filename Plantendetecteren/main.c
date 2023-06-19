@@ -46,7 +46,7 @@ bij volle batterij
 
 void h_bridgeR_set_percentage(signed char percentage);
 void h_bridgeL_set_percentage(signed char percentage);
-void signaal_geven();
+void signaal_aangeven();
 
 volatile int timerteller = 0;
 
@@ -237,7 +237,7 @@ int main(void)
             PORT &= ~(1 << PIN22);
             for (int i = 0; i < 10; i++)
             {
-                signaal_geven();
+                signaal_aangeven();
             }
             toestand = 3;
             break;
@@ -248,7 +248,7 @@ int main(void)
     return 0;
 }
 
-void signaal_geven()
+void signaal_aangeven()
 {
     PORT_LED |= (1<<LED_1);         // LED 1 aan
     PORT_LED &= ~(1<<LED_2);        // LED 2 uit
