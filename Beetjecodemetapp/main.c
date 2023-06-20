@@ -34,7 +34,7 @@ int main(void)
     while(1)
     {
         waarde = GetDistance();
-        display_getal(waarde);
+        //display_getal(waarde);
 
         if(Bluetooth_Getal == 2)//Bluetooth verbroken
         {
@@ -48,20 +48,20 @@ int main(void)
         {
             toestand = 99;
         }
-//        if(((IRregister & (1 << IRbaklinks)) == 0) || ((IRregister & (1 << IRbakrechts)) == 0))//Plantenbak gedetecteerd
-//        {
-//            if(bakvar != 1)
-//            {
-//                bakvar = 1;
-//                TCCR4B = (1 << CS42) | (0 << CS41) | (0 << CS40);
-//                toestand = 8;
-//            }
-//            else
-//            {
-//                toestand = 4;
-//            }
-//        }
-        if(waarde <= 100)//Voorultrasoon ziet object
+        if((toestand >= 3) && (((IRregister & (1 << IRbaklinks)) == 0) || ((IRregister & (1 << IRbakrechts)) == 0)))//Plantenbak gedetecteerd
+        {
+            if(bakvar != 1)
+            {
+                bakvar = 1;
+                TCCR4B = (1 << CS42) | (0 << CS41) | (0 << CS40);
+                toestand = 8;
+            }
+            else
+            {
+                toestand = 4;
+            }
+        }
+        if((toestand >= 3) && (waarde <= 100))//Voorultrasoon ziet object
         {
             toestand = 9;
         }
@@ -94,6 +94,7 @@ int main(void)
         case 0:
             PORT_LED |= (1<<LED_2);
             PORT_LED &= ~(1<<LED_1);
+            PORT_buzzer &= ~(1<<buzzer);
             h_bridgeL_set_percentage(snelheiduit);//motoren uit
             h_bridgeR_set_percentage(snelheiduit);
             if(Bluetooth_Getal == 1)//Bluetooth verbonden
@@ -104,6 +105,7 @@ int main(void)
         case 1://wachten op aan knop
             PORT_LED |= (1<<LED_2);
             PORT_LED |= (1<<LED_1);
+            PORT_buzzer &= ~(1<<buzzer);
             h_bridgeL_set_percentage(snelheiduit);//motoren uit
             h_bridgeR_set_percentage(snelheiduit);
             if(Bluetooth_Getal == 3)//Aanknop
@@ -114,6 +116,7 @@ int main(void)
         case 2://toestand keuze case
             PORT_LED &= ~(1<<LED_2);
             PORT_LED |= (1<<LED_1);
+            PORT_buzzer &= ~(1<<buzzer);
             if(Bluetooth_Getal == 4)//Autonoomknop
             {
                 toestand = 3;
@@ -122,6 +125,7 @@ int main(void)
         case 3://rijstrook inrijden
             PORT_LED &= ~(1<<LED_2);
             PORT_LED &= ~(1<<LED_1);
+            PORT_buzzer &= ~(1<<buzzer);
             h_bridgeR_set_percentage(snelheidrechtdoor);
             h_bridgeL_set_percentage(snelheidrechtdoor);
             rechtdoorrijden();
@@ -148,7 +152,7 @@ int main(void)
                 //toestand = 7;
             }
             break;
-        case 5://Naar links rijden
+        case 5:
             //Motoren naar rechts
             h_bridgeR_set_percentage(snelheidhard);
             h_bridgeL_set_percentage(snelheidzacht);
@@ -161,7 +165,7 @@ int main(void)
                 //toestand = 7;
             }
             break;
-        case 6://Naar rechts rijden
+        case 6:
             //Motoren naar links
             h_bridgeR_set_percentage(snelheidzacht);
             h_bridgeL_set_percentage(snelheidhard);
@@ -186,14 +190,7 @@ int main(void)
         case 8://signaleren
             h_bridgeR_set_percentage(snelheiduit);
             h_bridgeL_set_percentage(snelheiduit);
-            PORT_LED |= (1<<LED_1);         // LED 1 aan
-            PORT_LED |= (1<<LED_2);        // LED 2 uit
-            PORT_buzzer |= (1<<buzzer);     // buzzer aan
-            _delay_ms(500);
-            PORT_LED &= ~(1<<LED_2);         // LED 2 aan
-            PORT_LED &= ~(1<<LED_1);        // LED 1 uit
-            PORT_buzzer &= ~(1<<buzzer);    // buzzer uit
-            //signaal_geven();
+            signaal_geven();
             toestand = 4;
             break;
         case 9://Voorultrasoon ziet iets
@@ -202,11 +199,11 @@ int main(void)
             PORT_LED |= (1<<LED_1);
             PORT_LED |= (1<<LED_2);
             PORT_buzzer |= (1<<buzzer);
-            PORTB &= ~(1 << PB7);
             if(waarde > 60)
             {
-                PORTB |= (1 << PB7);
-                PORT_buzzer &= ~(1<<buzzer);
+                PORT_LED &= ~(1<<LED_2);         // LED 2 aan
+                PORT_LED &= ~(1<<LED_1);        // LED 1 uit
+                PORT_buzzer &= ~(1<<buzzer);    // buzzer uit
                 toestand = 4;
             }
             break;

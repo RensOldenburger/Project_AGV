@@ -49,7 +49,6 @@ void signaal_geven()
     PORT_LED |= (1<<LED_2);         // LED 2 aan
     PORT_LED &= ~(1<<LED_1);        // LED 1 uit
     PORT_buzzer &= ~(1<<buzzer);    // buzzer uit
-    _delay_ms(500);
 }
 
 void h_bridgeR_set_percentage(signed char percentage)
@@ -99,7 +98,7 @@ ISR(TIMER0_OVF_vect)
 //Timer Bak detectie
 ISR(TIMER4_OVF_vect)
 {
-    if(timertellerbak >= 3)
+    if(timertellerbak >= 2)
     {
         timertellerbak = 0;
         bakvar = 0;
