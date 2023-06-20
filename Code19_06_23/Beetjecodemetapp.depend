@@ -59,3 +59,12 @@
 
 1687186374 c:\users\aldar\onedrive\documents\github\project_agv\code19_06_23\library.h
 
+1687247551 source:c:\users\aldar\onedrive\documents\github\project_agv\code19_06_23\main.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	<math.h>
+	<avr/interrupt.h>
+	"Bluetooth.h"
+	"Library.h"
+

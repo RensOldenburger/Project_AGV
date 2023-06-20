@@ -1,3 +1,4 @@
+//#define F_CPU 16000000UL
 #include <avr/io.h>
 #include <util/delay.h>
 #include <stdlib.h>
@@ -51,17 +52,17 @@ int main(void)
             if(bakvar != 1)
             {
                 bakvar = 1;
-                TCCR4B |= (1 << CS42);
+                TCCR4B = (1 << CS42) | (0 << CS41) | (0 << CS40);
                 toestand = 8;
             }
+            else
+            {
+                toestand = 4;
+            }
         }
-//        if(waarde < 30)//voor ultrasoon ziet iets
+//        if(waarde <= 30)//Voorultrasoon ziet object
 //        {
 //            toestand = 9;
-//        }
-//        if(((IRregister & (1 << IRonderlinks)) == 0) && ((IRregister & (1 << IRonderrechts)) == 0))//Einde rijstrook beide ir zien niks
-//        {
-//            toestand = 7;
 //        }
         switch(toestand)
         {
@@ -91,6 +92,7 @@ int main(void)
             break;
         case 0:
             PORT_LED |= (1<<LED_2);
+            PORT_LED &= ~(1<<LED_1);
             h_bridgeL_set_percentage(snelheiduit);//motoren uit
             h_bridgeR_set_percentage(snelheiduit);
             if(Bluetooth_Getal == 1)//Bluetooth verbonden
@@ -99,6 +101,7 @@ int main(void)
             }
             break;
         case 1://wachten op aan knop
+            PORT_LED |= (1<<LED_2);
             PORT_LED |= (1<<LED_1);
             h_bridgeL_set_percentage(snelheiduit);//motoren uit
             h_bridgeR_set_percentage(snelheiduit);
@@ -108,7 +111,8 @@ int main(void)
             }
             break;
         case 2://toestand keuze case
-            PORT_LED &= ~(1<<LED_1);
+            PORT_LED &= ~(1<<LED_2);
+            PORT_LED |= (1<<LED_1);
             if(Bluetooth_Getal == 4)//Autonoomknop
             {
                 toestand = 3;
@@ -116,6 +120,7 @@ int main(void)
             break;
         case 3://rijstrook inrijden
             PORT_LED &= ~(1<<LED_2);
+            PORT_LED &= ~(1<<LED_1);
             h_bridgeR_set_percentage(snelheidrechtdoor);
             h_bridgeL_set_percentage(snelheidrechtdoor);
             rechtdoorrijden();
