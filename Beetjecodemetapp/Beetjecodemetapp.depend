@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1687260263 source:d:\schoolv2\projectagv\beetjecodemetapp\main.c
+1687266523 source:d:\schoolv2\projectagv\beetjecodemetapp\main.c
 	<avr/io.h>
 	<util/delay.h>
 	<stdlib.h>
@@ -31,7 +31,7 @@
 
 1687248403 d:\schoolv2\projectagv\beetjecodemetapp\library.h
 
-1687260052 source:d:\schoolv2\projectagv\beetjecodemetapp\library.c
+1687262074 source:d:\schoolv2\projectagv\beetjecodemetapp\library.c
 	<avr/io.h>
 	<util/delay.h>
 	<stdlib.h>

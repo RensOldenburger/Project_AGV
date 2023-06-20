@@ -99,8 +99,9 @@ ISR(TIMER0_OVF_vect)
 //Timer Bak detectie
 ISR(TIMER4_OVF_vect)
 {
-    if(timertellerbak >= 7)
+    if(timertellerbak >= 3)
     {
+        timertellerbak = 0;
         bakvar = 0;
         TCCR4B = 0;
     }

@@ -1,4 +1,4 @@
-//#define F_CPU 16000000UL
+#define F_CPU 16000000UL
 #include <avr/io.h>
 #include <util/delay.h>
 #include <stdlib.h>
@@ -25,7 +25,7 @@ Bluetooth getallen:
 int main(void)
 {
     init();
-
+    init_display_meneer();
     initTimer();
     int waarde;
 
@@ -33,7 +33,8 @@ int main(void)
 
     while(1)
     {
-        //waarde = GetDistance();
+        waarde = GetDistance();
+        display_getal(waarde);
 
         if(Bluetooth_Getal == 2)//Bluetooth verbroken
         {
@@ -47,23 +48,23 @@ int main(void)
         {
             toestand = 99;
         }
-        if(((IRregister & (1 << IRbaklinks)) == 0) || ((IRregister & (1 << IRbakrechts)) == 0))//Plantenbak gedetecteerd
-        {
-            if(bakvar != 1)
-            {
-                bakvar = 1;
-                TCCR4B = (1 << CS42) | (0 << CS41) | (0 << CS40);
-                toestand = 8;
-            }
-            else
-            {
-                toestand = 4;
-            }
-        }
-//        if(waarde <= 30)//Voorultrasoon ziet object
+//        if(((IRregister & (1 << IRbaklinks)) == 0) || ((IRregister & (1 << IRbakrechts)) == 0))//Plantenbak gedetecteerd
 //        {
-//            toestand = 9;
+//            if(bakvar != 1)
+//            {
+//                bakvar = 1;
+//                TCCR4B = (1 << CS42) | (0 << CS41) | (0 << CS40);
+//                toestand = 8;
+//            }
+//            else
+//            {
+//                toestand = 4;
+//            }
 //        }
+        if(waarde <= 100)//Voorultrasoon ziet object
+        {
+            toestand = 9;
+        }
         switch(toestand)
         {
         case 99://Noodtoestand
@@ -185,14 +186,27 @@ int main(void)
         case 8://signaleren
             h_bridgeR_set_percentage(snelheiduit);
             h_bridgeL_set_percentage(snelheiduit);
-            signaal_geven();
+            PORT_LED |= (1<<LED_1);         // LED 1 aan
+            PORT_LED |= (1<<LED_2);        // LED 2 uit
+            PORT_buzzer |= (1<<buzzer);     // buzzer aan
+            _delay_ms(500);
+            PORT_LED &= ~(1<<LED_2);         // LED 2 aan
+            PORT_LED &= ~(1<<LED_1);        // LED 1 uit
+            PORT_buzzer &= ~(1<<buzzer);    // buzzer uit
+            //signaal_geven();
             toestand = 4;
             break;
         case 9://Voorultrasoon ziet iets
             h_bridgeR_set_percentage(snelheiduit);
             h_bridgeL_set_percentage(snelheiduit);
-            if(waarde > 30)
+            PORT_LED |= (1<<LED_1);
+            PORT_LED |= (1<<LED_2);
+            PORT_buzzer |= (1<<buzzer);
+            PORTB &= ~(1 << PB7);
+            if(waarde > 60)
             {
+                PORTB |= (1 << PB7);
+                PORT_buzzer &= ~(1<<buzzer);
                 toestand = 4;
             }
             break;
@@ -245,6 +259,8 @@ void init()
 	//LEDS
     DDR_LED |= (1<<LED_1) | (1<<LED_2);     // enable pins as output
     PORT_LED &= ~(1<<LED_1) & ~(1<<LED_2);  // put pins low
+    DDRB |= (1 << PB7);
+    PORTB |= ~(1 << PB7);
     //PORT_LED |= (1<<LED_2);
 
     //Buzzer
@@ -254,19 +270,25 @@ void init()
     //knoppen
 	DDRF &= ~(1<<Noodknoppin);
 	PORTF |= (1<<Noodknoppin);   		// enAble alle knoppen voor input
-}
 
-
-void initTimer(void){
+	//trigger ultra voor
     Ultraregister |= (1<<Voorultrasoontrig);
     UltraPort &= ~(1<<Voorultrasoontrig);
+}
+
+void initTimer(void){
     TCCR2A = 0;
     TCCR2B |= (1<<CS20);
     //16000000 / 256 = 62,500
     //1 / 62500 = 0.000016s
     //62500x/sec
     TIMSK2 = (1<<TOIE2);
-    sei();
+
+    DDRF &= ~(1<<PF7);
+//    DDRB |= (1<<PB7) | (1<<PB6) | (1<<PB5) | (1<<PB4);
+//    PORTB |= (1<<PB7) | (1<<PB6) | (1<<PB5) | (1<<PB4);
+    DDRL |= (1<<PL6);
+    PORTL &= ~(1<<PL6);
 }
 
 int GetDistance(void){
@@ -275,14 +297,14 @@ int GetDistance(void){
 
     TriggerPulse();
 
-    while ((Ultraregister & (1<<Voorultrasoonecho)) == 0){
+    while ((PINF & (1<<PF7)) == 0){
 
     }
     TCNT2 = 0;
     TIFR2 = 1<<TOV2;
     count = 0;
 
-    while ((Ultraregister & (1<<Voorultrasoonecho)) != 0){
+    while ((PINF & (1<<PF7)) != 0){
 
     }
     Distance = count;
@@ -297,12 +319,153 @@ int GetDistance(void){
 
     return Distance;
 }
-
 void TriggerPulse (void){
-    UltraPort |= (1<<Voorultrasoontrig);
+    PORTL &= (~(1<<PL6));
+    _delay_us(2);
+    PORTL |= (1<<PL6);
     _delay_us(10);
-    UltraPort &= (~(1<<Voorultrasoontrig));
+    PORTL &= (~(1<<PL6));
 }
 ISR(TIMER2_OVF_vect){
     count++;
+}
+
+//void initTimer(void){
+//    Ultraregister |= (1<<Voorultrasoontrig);
+//    UltraPort &= ~(1<<Voorultrasoontrig);
+//    TCCR2A = 0;
+//    TCCR2B |= (1<<CS20);
+//    //16000000 / 256 = 62,500
+//    //1 / 62500 = 0.000016s
+//    //62500x/sec
+//    TIMSK2 = (1<<TOIE2);
+//    sei();
+//}
+//
+//int GetDistance(void){
+//
+//    int Distance;
+//
+//    TriggerPulse();
+//
+//    while ((Ultraregister & (1<<Voorultrasoonecho)) == 0){
+//
+//    }
+//    TCNT2 = 0;
+//    TIFR2 = 1<<TOV2;
+//    count = 0;
+//
+//    while ((Ultraregister & (1<<Voorultrasoonecho)) != 0){
+//
+//    }
+//    Distance = count;
+//
+//    Distance = Distance * 0.008 * 343;
+//
+//    //340  m/s
+//    //34 cm / ms
+//    //340   mm / ms
+//    //0.34  mm / us
+//    //5.44 * count geeft distance in mm
+//
+//    return Distance;
+//}
+//
+//void TriggerPulse (void){
+//    UltraPort |= (1<<Voorultrasoontrig);
+//    _delay_us(10);
+//    UltraPort &= (~(1<<Voorultrasoontrig));
+//}
+//ISR(TIMER2_OVF_vect){
+//    count++;
+//}
+
+// Aansluitingen:
+// 8: SDI	-> PH5
+// 7: SFTCLK	-> PH4
+// 4: LCHCLK	-> PG5
+#define SDI_BIT		PH5
+#define DDR_SDI		DDRH
+#define PORT_SDI	PORTH
+
+#define SFTCLK_BIT	PH4
+#define DDR_SFTCLK	DDRH
+#define PORT_SFTCLK	PORTH
+
+#define LCHCLK_BIT	PG5
+#define DDR_LCHCLK	DDRG
+#define PORT_LCHCLK	PORTG
+
+static unsigned int segmentcodes[] = {
+	~0xFC, ~0x60, ~0xDA, ~0xF2,
+	~0x66, ~0xB6, ~0xBE, ~0xE0,
+	~0xFE, ~0xF6, ~0xEE, ~0x3E,
+	~0x9C, ~0x7A, ~0x9E, ~0x8E };
+
+void init_display_meneer (void)
+{
+	// Initialiseer de pinnen voor datain, shiftclk en latchclk als output
+	DDR_SDI    |= (1 << SDI_BIT);
+	DDR_SFTCLK |= (1 << SFTCLK_BIT);
+	DDR_LCHCLK |= (1 << LCHCLK_BIT);
+
+	// Maak shiftclk en latchclk laag
+	PORT_SFTCLK &= ~(1 << SFTCLK_BIT);
+	PORT_LCHCLK &= ~(1 << LCHCLK_BIT);
+}
+
+void send_data(char data)
+{
+	for (unsigned i = 0; i < 8; i++)
+	// Herhaal voor alle bits in een char
+	{
+		// Bepaal de waarde van de bit die je naar het schuifregister
+		// wil sturen
+		int bit = data & 1;
+		data >>= 1;
+
+		// Maak de juiste pin hoog of laag op basis van de bepaalde waarde
+		// van het bit
+		if (bit)
+		{
+			PORT_SDI |= (1 << SDI_BIT);
+		}
+		else
+		{
+			PORT_SDI &= ~(1 << SDI_BIT);
+		}
+
+		// Toggle shiftclk (hoeveel tijd moest het signaal minimaal hoog zijn?)
+		// Puls moet minimaal 13 ns hoog zijn. Een clk cycle op de Arduino duurt
+		// 62 ns, dus signaal kan hoog en de volgende cycle weer omlaag
+		PORT_SFTCLK |= (1 << SFTCLK_BIT);
+		PORT_SFTCLK &= ~(1 << SFTCLK_BIT);
+	}
+}
+
+void send_enable(int display_nummer)
+{
+	send_data(0x10 << display_nummer);
+}
+
+void display(char data, int display_nummer)
+{
+	send_data(data);
+	send_enable(display_nummer);
+
+	// Toggle latchclk (hoeveel tijd moest het signaal minimaal hoog zijn?)
+	// Puls moet minimaal 13 ns hoog zijn. Een clk cycle op de Arduino duurt
+	// 62 ns, dus signaal kan hoog en de volgende cycle weer omlaag
+	PORT_LCHCLK |= (1 << LCHCLK_BIT);
+	PORT_LCHCLK &= ~(1 << LCHCLK_BIT);
+}
+
+void display_getal(unsigned int getal)
+{
+	for (int i = 0; i < 4; i++)
+	{
+		display(segmentcodes[getal%10], i);
+		getal /= 10;
+		_delay_ms(1);   // 1 kHz
+	}
 }
