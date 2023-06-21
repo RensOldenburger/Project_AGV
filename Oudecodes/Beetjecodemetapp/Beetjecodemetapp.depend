@@ -38,3 +38,24 @@
 	<avr/interrupt.h>
 	"Library.h"
 
+1687260728 source:c:\users\rensh\documents\github\project_agv\oudecodes\beetjecodemetapp\bluetooth.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	<avr/interrupt.h>
+	"Bluetooth.h"
+
+1687260728 c:\users\rensh\documents\github\project_agv\oudecodes\beetjecodemetapp\bluetooth.h
+
+1687260728 source:c:\users\rensh\documents\github\project_agv\oudecodes\beetjecodemetapp\fuse.c
+	<avr/io.h>
+
+1687260728 source:c:\users\rensh\documents\github\project_agv\oudecodes\beetjecodemetapp\library.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	<avr/interrupt.h>
+	"Library.h"
+
+1687260728 c:\users\rensh\documents\github\project_agv\oudecodes\beetjecodemetapp\library.h
+

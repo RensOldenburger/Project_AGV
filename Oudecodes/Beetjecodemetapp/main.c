@@ -241,6 +241,11 @@ int main(void)
     return 0;
 }
 
+void GitHub(void)
+{
+    ;;
+}
+
 void init()
 {
     initBluetooth();
