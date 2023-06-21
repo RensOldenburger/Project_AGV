@@ -27,17 +27,15 @@ int main(void)
     init();
     init_display_meneer();
     initultrasoon();
-    int waardeachter = 0;
-    int waardevoor;
+    int waarde;
 
     int toestand = 0;
     int toestandvolgen = 0;
 
     while(1)
     {
-        //waardeachter = achterGetDistance();
-        //waardevoor = voorGetDistance();
-        //display_getal(waardevoor);
+//        waarde = GetDistance();
+//        display_getal(waarde);
 
         if(Bluetooth_Getal == 2)//Bluetooth verbroken
         {
@@ -64,18 +62,15 @@ int main(void)
                 toestand = 4;
             }
         }
-//        if((toestand >= 3) && (toestand != 99) && (waardevoor <= 50))//Voorultrasoon ziet object
+//        if((waarde <= 50))//Voorultrasoon ziet object(toestand >= 3) && (toestand != 99) &&
 //        {
 //            toestand = 9;
 //        }
-//        if((toestand >= 3) && (toestand != 99) && (waardeachter <= 80))//Voorultrasoon ziet object
-//        {
-//            toestand = 33;
-//        }
-//        if((toestand >= 3) && ((IRregister & (1 << IRonderlinks)) && (IRregister & (1 << IRonderrechts))))
-//        {
-//            toestand = 10;
-//        }
+
+        if((toestand >= 3) && ((IRregister & (1 << IRonderlinks)) && (IRregister & (1 << IRonderrechts))))
+        {
+            toestand = 10;
+        }
         switch(toestand)
         {
         case 99://Noodtoestand
@@ -217,7 +212,7 @@ int main(void)
             PORT_LED |= (1<<LED_1);
             PORT_LED |= (1<<LED_2);
             PORT_buzzer |= (1<<buzzer);
-            if(waardevoor > 60)
+            if(waarde > 60)
             {
                 PORT_LED &= ~(1<<LED_2);         // LED 2 aan
                 PORT_LED &= ~(1<<LED_1);        // LED 1 uit
@@ -225,124 +220,119 @@ int main(void)
                 toestand = 4;
             }
             break;
-        case 33:
-            h_bridgeR_set_percentage(snelheiduit);
-            h_bridgeL_set_percentage(snelheiduit);
-            PORT_LED |= (1<<LED_1);
-            PORT_LED |= (1<<LED_2);
-            PORT_buzzer |= (1<<buzzer);
-            if(waardeachter > 60)
-            {
-                PORT_LED &= ~(1<<LED_2);         // LED 2 aan
-                PORT_LED &= ~(1<<LED_1);        // LED 1 uit
-                PORT_buzzer &= ~(1<<buzzer);    // buzzer uit
-                toestand = 4;
-            }
-            break;
+//        case 33:
+//            h_bridgeR_set_percentage(snelheiduit);
+//            h_bridgeL_set_percentage(snelheiduit);
+//            PORT_LED |= (1<<LED_1);
+//            PORT_LED |= (1<<LED_2);
+//            PORT_buzzer |= (1<<buzzer);
+//            if(waarde > 60)
+//            {
+//                PORT_LED &= ~(1<<LED_2);         // LED 2 aan
+//                PORT_LED &= ~(1<<LED_1);        // LED 1 uit
+//                PORT_buzzer &= ~(1<<buzzer);    // buzzer uit
+//                toestand = 4;
+//            }
+//            break;
         case 10:
             rechtdoorrijden();
+            h_bridgeR_set_percentage(50);
+            h_bridgeL_set_percentage(80);
             _delay_ms(1000);
-            bochtrechts();
-            _delay_ms(500);
-            rechtdoorrijden();
-            _delay_ms(1000);
-            bochtrechts();
-            _delay_ms(500);
-            rechtdoorrijden();
             while((toestand >= 3) && ((IRregister & (1 << IRonderlinks)) && (IRregister & (1 << IRonderrechts))))
             {
 
             }
             toestand = 3;
             break;
-        case 11:
-            if(waardevoor <= 150)
-            {
-                toestandvolgen = 3;
-            }
-//            if(waardeachter <= 30)
+//        case 11:
+//            if(waardevoor <= 150)
 //            {
-//                toestandvolgen = 13;
+//                toestandvolgen = 3;
 //            }
-            if((waardevoor > 150) || (waardeachter > 150))
-            {
-                toestandvolgen = 0;
-            }
-            if(Bluetooth_Getal == 2)//Bluetooth verbroken
-            {
-                toestand = 0;
-            }
-            if(Bluetooth_Getal == 6)//Uitknop ingedrukt
-            {
-                toestand = 1;
-            }
-            if(Bluetooth_Getal == 7)// || (Noodknopport & (1<<Noodknoppin)) == 0))
-            {
-                toestand = 99;
-            }
-            switch(toestandvolgen)
-            {
-            case 0:
-                h_bridgeR_set_percentage(snelheiduit);
-                h_bridgeL_set_percentage(snelheiduit);
-                break;
-            case 3:
-                PORT_LED &= ~(1<<LED_2);
-                PORT_LED &= ~(1<<LED_1);
-                PORT_buzzer &= ~(1<<buzzer);
-                h_bridgeR_set_percentage(snelheidrechtdoor);
-                h_bridgeL_set_percentage(snelheidrechtdoor);
-                rechtdoorrijden();
-                if(((IRregister & (1 << IRonderrechts)) == 0) && ((IRregister & (1 << IRonderlinks)) == 0))
-                {
-                    toestandvolgen = 4;
-                }
-                break;
-            case 4://Tussen de balken rechtdoor
-                //Motoren naar rechtdoor
-                rechtdoorrijden();
-                h_bridgeR_set_percentage(snelheidrechtdoor);
-                h_bridgeL_set_percentage(snelheidrechtdoor);
-                if(IRregister & (1 << IRonderrechts))
-                {
-                    toestandvolgen = 5;
-                }
-                else if(IRregister & (1 << IRonderlinks))
-                {
-                    toestandvolgen = 6;
-                }
-                else if((IRregister & (1 << IRonderrechts)) && (IRregister & (1 << IRonderlinks)))
-                {
-                    //toestandvolgen = 7;
-                }
-                break;
-            case 5:
-                //Motoren naar rechts
-                h_bridgeR_set_percentage(snelheidhard);
-                h_bridgeL_set_percentage(snelheidzacht);
-                if(((IRregister & (1 << IRonderrechts)) == 0) && ((IRregister & (1 << IRonderlinks)) == 0))
-                {
-                    toestandvolgen = 4;
-                }
-                else if((IRregister & (1 << IRonderrechts)) && (IRregister & (1 << IRonderlinks)))
-                {
-                    //toestandvolgen = 7;
-                }
-                break;
-            case 6:
-                //Motoren naar links
-                h_bridgeR_set_percentage(snelheidzacht);
-                h_bridgeL_set_percentage(snelheidhard);
-                if(((IRregister & (1 << IRonderrechts)) == 0) && ((IRregister & (1 << IRonderlinks)) == 0))
-                {
-                    toestandvolgen = 4;
-                }
-                else if((IRregister & (1 << IRonderrechts)) && (IRregister & (1 << IRonderlinks)))
-                {
-                    //toestandvolgen = 7;
-                }
-                break;
-            }
+////            if(waardeachter <= 30)
+////            {
+////                toestandvolgen = 13;
+////            }
+//            if((waardevoor > 150) || (waardeachter > 150))
+//            {
+//                toestandvolgen = 0;
+//            }
+//            if(Bluetooth_Getal == 2)//Bluetooth verbroken
+//            {
+//                toestand = 0;
+//            }
+//            if(Bluetooth_Getal == 6)//Uitknop ingedrukt
+//            {
+//                toestand = 1;
+//            }
+//            if(Bluetooth_Getal == 7)// || (Noodknopport & (1<<Noodknoppin)) == 0))
+//            {
+//                toestand = 99;
+//            }
+//            switch(toestandvolgen)
+//            {
+//            case 0:
+//                h_bridgeR_set_percentage(snelheiduit);
+//                h_bridgeL_set_percentage(snelheiduit);
+//                break;
+//            case 3:
+//                PORT_LED &= ~(1<<LED_2);
+//                PORT_LED &= ~(1<<LED_1);
+//                PORT_buzzer &= ~(1<<buzzer);
+//                h_bridgeR_set_percentage(snelheidrechtdoor);
+//                h_bridgeL_set_percentage(snelheidrechtdoor);
+//                rechtdoorrijden();
+//                if(((IRregister & (1 << IRonderrechts)) == 0) && ((IRregister & (1 << IRonderlinks)) == 0))
+//                {
+//                    toestandvolgen = 4;
+//                }
+//                break;
+//            case 4://Tussen de balken rechtdoor
+//                //Motoren naar rechtdoor
+//                rechtdoorrijden();
+//                h_bridgeR_set_percentage(snelheidrechtdoor);
+//                h_bridgeL_set_percentage(snelheidrechtdoor);
+//                if(IRregister & (1 << IRonderrechts))
+//                {
+//                    toestandvolgen = 5;
+//                }
+//                else if(IRregister & (1 << IRonderlinks))
+//                {
+//                    toestandvolgen = 6;
+//                }
+//                else if((IRregister & (1 << IRonderrechts)) && (IRregister & (1 << IRonderlinks)))
+//                {
+//                    //toestandvolgen = 7;
+//                }
+//                break;
+//            case 5:
+//                //Motoren naar rechts
+//                h_bridgeR_set_percentage(snelheidhard);
+//                h_bridgeL_set_percentage(snelheidzacht);
+//                if(((IRregister & (1 << IRonderrechts)) == 0) && ((IRregister & (1 << IRonderlinks)) == 0))
+//                {
+//                    toestandvolgen = 4;
+//                }
+//                else if((IRregister & (1 << IRonderrechts)) && (IRregister & (1 << IRonderlinks)))
+//                {
+//                    //toestandvolgen = 7;
+//                }
+//                break;
+//            case 6:
+//                //Motoren naar links
+//                h_bridgeR_set_percentage(snelheidzacht);
+//                h_bridgeL_set_percentage(snelheidhard);
+//                if(((IRregister & (1 << IRonderrechts)) == 0) && ((IRregister & (1 << IRonderlinks)) == 0))
+//                {
+//                    toestandvolgen = 4;
+//                }
+//                else if((IRregister & (1 << IRonderrechts)) && (IRregister & (1 << IRonderlinks)))
+//                {
+//                    //toestandvolgen = 7;
+//                }
+//                break;
+//            }
         }
     }
 
@@ -412,10 +402,10 @@ void initultrasoon(void){
     //62500x/sec
     TIMSK2 = (1<<TOIE2);
 
-    //achter ultrasoon
-    DDRK &= ~(1<<PK0);
-    DDRL |= (1<<PL7);
-    PORTL &= ~(1<<PL7);
+//    //achter ultrasoon
+//    DDRK &= ~(1<<PK0);
+//    DDRL |= (1<<PL7);
+//    PORTL &= ~(1<<PL7);
 
     //voor ultrasoon
     DDRF &= ~(1<<PF7);
@@ -423,11 +413,11 @@ void initultrasoon(void){
     PORTL &= ~(1<<PL6);
 }
 
-int achterGetDistance(void){
+int GetDistance(void){
 
     int Distance;
 
-    achterTriggerPulse();
+    TriggerPulse();
 
     while ((PINF & (1<<PF7)) == 0){
 
@@ -452,44 +442,7 @@ int achterGetDistance(void){
     return Distance;
 }
 
-int voorGetDistance(void){
-
-    int Distance;
-
-    voorTriggerPulse();
-
-    while ((PINK & (1<<PK0)) == 0){
-
-    }
-    TCNT2 = 0;
-    TIFR2 = 1<<TOV2;
-    count = 0;
-
-    while ((PINK & (1<<PK0)) != 0){
-
-    }
-    Distance = count;
-
-    Distance = Distance * 0.008 * 343;
-
-    //340  m/s
-    //34 cm / ms
-    //340   mm / ms
-    //0.34  mm / us
-    //5.44 * count geeft distance in mm
-
-    return Distance;
-}
-
-void achterTriggerPulse (void){
-    PORTL &= (~(1<<PL7));
-    _delay_us(2);
-    PORTL |= (1<<PL7);
-    _delay_us(10);
-    PORTL &= (~(1<<PL7));
-}
-
-void voorTriggerPulse (void){
+void TriggerPulse (void){
     PORTL &= (~(1<<PL6));
     _delay_us(2);
     PORTL |= (1<<PL6);
