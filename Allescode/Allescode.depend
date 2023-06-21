@@ -11,16 +11,16 @@
 1687331747 source:c:\users\aldar\onedrive\documents\github\project_agv\allescode\fuse.c
 	<avr/io.h>
 
-1687332528 source:c:\users\aldar\onedrive\documents\github\project_agv\allescode\library.c
+1687360214 source:c:\users\aldar\onedrive\documents\github\project_agv\allescode\library.c
 	<avr/io.h>
 	<util/delay.h>
 	<stdlib.h>
 	<avr/interrupt.h>
 	"Library.h"
 
-1687346027 c:\users\aldar\onedrive\documents\github\project_agv\allescode\library.h
+1687360875 c:\users\aldar\onedrive\documents\github\project_agv\allescode\library.h
 
-1687345864 source:c:\users\aldar\onedrive\documents\github\project_agv\allescode\main.c
+1687360650 source:c:\users\aldar\onedrive\documents\github\project_agv\allescode\main.c
 	<avr/io.h>
 	<util/delay.h>
 	<stdlib.h>

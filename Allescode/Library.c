@@ -53,7 +53,7 @@ void signaal_geven()
     PORT_LED |= (1<<LED_1);         // LED 1 aan
     PORT_LED &= ~(1<<LED_2);        // LED 2 uit
     PORT_buzzer |= (1<<buzzer);     // buzzer aan
-    _delay_ms(500);
+    _delay_ms(1000);
     PORT_LED |= (1<<LED_2);         // LED 2 aan
     PORT_LED &= ~(1<<LED_1);        // LED 1 uit
     PORT_buzzer &= ~(1<<buzzer);    // buzzer uit

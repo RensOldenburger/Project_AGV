@@ -36,8 +36,8 @@ int main(void)
     while(1)
     {
         //waardeachter = achterGetDistance();
-        waardevoor = voorGetDistance();
-        display_getal(waardevoor);
+        //waardevoor = voorGetDistance();
+        //display_getal(waardevoor);
 
         if(Bluetooth_Getal == 2)//Bluetooth verbroken
         {
@@ -47,7 +47,7 @@ int main(void)
         {
             toestand = 1;
         }
-        if(Bluetooth_Getal == 7)// || (Noodknopport & (1<<Noodknoppin)) == 0))
+        if(Bluetooth_Getal == 7)//noodknop
         {
             toestand = 99;
         }
@@ -64,10 +64,10 @@ int main(void)
                 toestand = 4;
             }
         }
-        if((toestand >= 3) && (toestand != 99) && (waardevoor <= 80))//Voorultrasoon ziet object
-        {
-            toestand = 9;
-        }
+//        if((toestand >= 3) && (toestand != 99) && (waardevoor <= 50))//Voorultrasoon ziet object
+//        {
+//            toestand = 9;
+//        }
 //        if((toestand >= 3) && (toestand != 99) && (waardeachter <= 80))//Voorultrasoon ziet object
 //        {
 //            toestand = 33;
@@ -217,7 +217,7 @@ int main(void)
             PORT_LED |= (1<<LED_1);
             PORT_LED |= (1<<LED_2);
             PORT_buzzer |= (1<<buzzer);
-            if(waardevoor > 100)
+            if(waardevoor > 60)
             {
                 PORT_LED &= ~(1<<LED_2);         // LED 2 aan
                 PORT_LED &= ~(1<<LED_1);        // LED 1 uit
@@ -231,7 +231,7 @@ int main(void)
             PORT_LED |= (1<<LED_1);
             PORT_LED |= (1<<LED_2);
             PORT_buzzer |= (1<<buzzer);
-            if(waardeachter > 100)
+            if(waardeachter > 60)
             {
                 PORT_LED &= ~(1<<LED_2);         // LED 2 aan
                 PORT_LED &= ~(1<<LED_1);        // LED 1 uit
@@ -248,6 +248,11 @@ int main(void)
             _delay_ms(1000);
             bochtrechts();
             _delay_ms(500);
+            rechtdoorrijden();
+            while((toestand >= 3) && ((IRregister & (1 << IRonderlinks)) && (IRregister & (1 << IRonderrechts))))
+            {
+
+            }
             toestand = 3;
             break;
         case 11:
@@ -424,35 +429,6 @@ int achterGetDistance(void){
 
     achterTriggerPulse();
 
-    while ((PINK & (1<<PK0)) == 0){
-
-    }
-    TCNT2 = 0;
-    TIFR2 = 1<<TOV2;
-    count = 0;
-
-    while ((PINK & (1<<PK0)) != 0){
-
-    }
-    Distance = count;
-
-    Distance = Distance * 0.008 * 343;
-
-    //340  m/s
-    //34 cm / ms
-    //340   mm / ms
-    //0.34  mm / us
-    //5.44 * count geeft distance in mm
-
-    return Distance;
-}
-
-int voorGetDistance(void){
-
-    int Distance;
-
-    voorTriggerPulse();
-
     while ((PINF & (1<<PF7)) == 0){
 
     }
@@ -476,12 +452,41 @@ int voorGetDistance(void){
     return Distance;
 }
 
+int voorGetDistance(void){
+
+    int Distance;
+
+    voorTriggerPulse();
+
+    while ((PINK & (1<<PK0)) == 0){
+
+    }
+    TCNT2 = 0;
+    TIFR2 = 1<<TOV2;
+    count = 0;
+
+    while ((PINK & (1<<PK0)) != 0){
+
+    }
+    Distance = count;
+
+    Distance = Distance * 0.008 * 343;
+
+    //340  m/s
+    //34 cm / ms
+    //340   mm / ms
+    //0.34  mm / us
+    //5.44 * count geeft distance in mm
+
+    return Distance;
+}
+
 void achterTriggerPulse (void){
-    PORTL &= (~(1<<PL6));
+    PORTL &= (~(1<<PL7));
     _delay_us(2);
-    PORTL |= (1<<PL6);
+    PORTL |= (1<<PL7);
     _delay_us(10);
-    PORTL &= (~(1<<PL6));
+    PORTL &= (~(1<<PL7));
 }
 
 void voorTriggerPulse (void){
