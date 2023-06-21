@@ -57,7 +57,7 @@
 	<avr/interrupt.h>
 	"Library.h"
 
-1687268592 c:\users\aldar\onedrive\documents\github\project_agv\beetjecodemetapp\library.h
+1687335931 c:\users\aldar\onedrive\documents\github\project_agv\beetjecodemetapp\library.h
 
 1687332239 source:c:\users\aldar\onedrive\documents\github\project_agv\beetjecodemetapp\main.c
 	<avr/io.h>

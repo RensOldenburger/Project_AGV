@@ -38,9 +38,9 @@
 /*
 bij volle batterij: 80,75,85
 */
-#define snelheidrechtdoor    35
-#define snelheidhard    30
-#define snelheidzacht   40
+#define snelheidrechtdoor    50
+#define snelheidhard    40
+#define snelheidzacht   30
 #define snelheiduit  99
 
 void h_bridgeR_set_percentage(signed char percentage);

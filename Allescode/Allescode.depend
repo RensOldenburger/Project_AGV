@@ -1,0 +1,31 @@
+# depslib dependency file v1.0
+1685916813 source:c:\users\aldar\onedrive\documents\github\project_agv\allescode\bluetooth.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	<avr/interrupt.h>
+	"Bluetooth.h"
+
+1685916813 c:\users\aldar\onedrive\documents\github\project_agv\allescode\bluetooth.h
+
+1687331747 source:c:\users\aldar\onedrive\documents\github\project_agv\allescode\fuse.c
+	<avr/io.h>
+
+1687332528 source:c:\users\aldar\onedrive\documents\github\project_agv\allescode\library.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	<avr/interrupt.h>
+	"Library.h"
+
+1687346027 c:\users\aldar\onedrive\documents\github\project_agv\allescode\library.h
+
+1687345864 source:c:\users\aldar\onedrive\documents\github\project_agv\allescode\main.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	<math.h>
+	<avr/interrupt.h>
+	"Bluetooth.h"
+	"Library.h"
+

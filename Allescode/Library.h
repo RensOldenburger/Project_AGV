@@ -38,14 +38,15 @@
 /*
 bij volle batterij: 80,75,85
 */
-#define snelheidrechtdoor    35
-#define snelheidhard    30
-#define snelheidzacht   40
+#define snelheidrechtdoor    70
+#define snelheidhard    60
+#define snelheidzacht   80
 #define snelheiduit  99
 
 void h_bridgeR_set_percentage(signed char percentage);
 void h_bridgeL_set_percentage(signed char percentage);
 void signaal_geven();
+void bochtrechts();
 void rechtdoorrijden();
 void achteruitrijden();
 void naarrechtsrijden();

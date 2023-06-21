@@ -26,15 +26,18 @@ int main(void)
 {
     init();
     init_display_meneer();
-    initTimer();
-    int waarde;
+    initultrasoon();
+    int waardeachter = 0;
+    int waardevoor;
 
     int toestand = 0;
+    int toestandvolgen = 0;
 
     while(1)
     {
-        waarde = GetDistance();
-        //display_getal(waarde);
+        //waardeachter = achterGetDistance();
+        waardevoor = voorGetDistance();
+        display_getal(waardevoor);
 
         if(Bluetooth_Getal == 2)//Bluetooth verbroken
         {
@@ -48,7 +51,7 @@ int main(void)
         {
             toestand = 99;
         }
-        if((toestand >= 3) && (((IRregister & (1 << IRbaklinks)) == 0) || ((IRregister & (1 << IRbakrechts)) == 0)))//Plantenbak gedetecteerd
+        if((toestand >= 3) && (toestand != 99) && (((IRregister & (1 << IRbaklinks)) == 0) || ((IRregister & (1 << IRbakrechts)) == 0)))//Plantenbak gedetecteerd
         {
             if(bakvar != 1)
             {
@@ -61,14 +64,18 @@ int main(void)
                 toestand = 4;
             }
         }
-        if((toestand >= 3) && (waarde <= 100))//Voorultrasoon ziet object
+        if((toestand >= 3) && (toestand != 99) && (waardevoor <= 80))//Voorultrasoon ziet object
         {
             toestand = 9;
         }
-        if((toestand >= 3) && ((IRregister & (1 << IRonderlinks)) && (IRregister & (1 << IRonderrechts)))
-        {
-            toestand = 10;
-        }
+//        if((toestand >= 3) && (toestand != 99) && (waardeachter <= 80))//Voorultrasoon ziet object
+//        {
+//            toestand = 33;
+//        }
+//        if((toestand >= 3) && ((IRregister & (1 << IRonderlinks)) && (IRregister & (1 << IRonderrechts))))
+//        {
+//            toestand = 10;
+//        }
         switch(toestand)
         {
         case 99://Noodtoestand
@@ -96,6 +103,7 @@ int main(void)
             }
             break;
         case 0:
+            PORT_buzzer &= ~(1<<buzzer);
             PORT_LED |= (1<<LED_2);
             PORT_LED &= ~(1<<LED_1);
             PORT_buzzer &= ~(1<<buzzer);
@@ -107,6 +115,7 @@ int main(void)
             }
             break;
         case 1://wachten op aan knop
+            PORT_buzzer &= ~(1<<buzzer);
             PORT_LED |= (1<<LED_2);
             PORT_LED |= (1<<LED_1);
             PORT_buzzer &= ~(1<<buzzer);
@@ -118,6 +127,7 @@ int main(void)
             }
             break;
         case 2://toestand keuze case
+            PORT_buzzer &= ~(1<<buzzer);
             PORT_LED &= ~(1<<LED_2);
             PORT_LED |= (1<<LED_1);
             PORT_buzzer &= ~(1<<buzzer);
@@ -125,6 +135,10 @@ int main(void)
             {
                 toestand = 3;
             }
+//            if(Bluetooth_Getal == 5)//Volgknop
+//            {
+//                toestand = 11;
+//            }
             break;
         case 3://rijstrook inrijden
             PORT_LED &= ~(1<<LED_2);
@@ -179,7 +193,7 @@ int main(void)
             }
             else if((IRregister & (1 << IRonderrechts)) && (IRregister & (1 << IRonderlinks)))
             {
-                toestand = 7;
+                //toestand = 7;
             }
             break;
         case 7://Balken niet meer in zicht en bocht maken
@@ -203,7 +217,21 @@ int main(void)
             PORT_LED |= (1<<LED_1);
             PORT_LED |= (1<<LED_2);
             PORT_buzzer |= (1<<buzzer);
-            if(waarde > 60)
+            if(waardevoor > 100)
+            {
+                PORT_LED &= ~(1<<LED_2);         // LED 2 aan
+                PORT_LED &= ~(1<<LED_1);        // LED 1 uit
+                PORT_buzzer &= ~(1<<buzzer);    // buzzer uit
+                toestand = 4;
+            }
+            break;
+        case 33:
+            h_bridgeR_set_percentage(snelheiduit);
+            h_bridgeL_set_percentage(snelheiduit);
+            PORT_LED |= (1<<LED_1);
+            PORT_LED |= (1<<LED_2);
+            PORT_buzzer |= (1<<buzzer);
+            if(waardeachter > 100)
             {
                 PORT_LED &= ~(1<<LED_2);         // LED 2 aan
                 PORT_LED &= ~(1<<LED_1);        // LED 1 uit
@@ -222,6 +250,94 @@ int main(void)
             _delay_ms(500);
             toestand = 3;
             break;
+        case 11:
+            if(waardevoor <= 150)
+            {
+                toestandvolgen = 3;
+            }
+//            if(waardeachter <= 30)
+//            {
+//                toestandvolgen = 13;
+//            }
+            if((waardevoor > 150) || (waardeachter > 150))
+            {
+                toestandvolgen = 0;
+            }
+            if(Bluetooth_Getal == 2)//Bluetooth verbroken
+            {
+                toestand = 0;
+            }
+            if(Bluetooth_Getal == 6)//Uitknop ingedrukt
+            {
+                toestand = 1;
+            }
+            if(Bluetooth_Getal == 7)// || (Noodknopport & (1<<Noodknoppin)) == 0))
+            {
+                toestand = 99;
+            }
+            switch(toestandvolgen)
+            {
+            case 0:
+                h_bridgeR_set_percentage(snelheiduit);
+                h_bridgeL_set_percentage(snelheiduit);
+                break;
+            case 3:
+                PORT_LED &= ~(1<<LED_2);
+                PORT_LED &= ~(1<<LED_1);
+                PORT_buzzer &= ~(1<<buzzer);
+                h_bridgeR_set_percentage(snelheidrechtdoor);
+                h_bridgeL_set_percentage(snelheidrechtdoor);
+                rechtdoorrijden();
+                if(((IRregister & (1 << IRonderrechts)) == 0) && ((IRregister & (1 << IRonderlinks)) == 0))
+                {
+                    toestandvolgen = 4;
+                }
+                break;
+            case 4://Tussen de balken rechtdoor
+                //Motoren naar rechtdoor
+                rechtdoorrijden();
+                h_bridgeR_set_percentage(snelheidrechtdoor);
+                h_bridgeL_set_percentage(snelheidrechtdoor);
+                if(IRregister & (1 << IRonderrechts))
+                {
+                    toestandvolgen = 5;
+                }
+                else if(IRregister & (1 << IRonderlinks))
+                {
+                    toestandvolgen = 6;
+                }
+                else if((IRregister & (1 << IRonderrechts)) && (IRregister & (1 << IRonderlinks)))
+                {
+                    //toestandvolgen = 7;
+                }
+                break;
+            case 5:
+                //Motoren naar rechts
+                h_bridgeR_set_percentage(snelheidhard);
+                h_bridgeL_set_percentage(snelheidzacht);
+                if(((IRregister & (1 << IRonderrechts)) == 0) && ((IRregister & (1 << IRonderlinks)) == 0))
+                {
+                    toestandvolgen = 4;
+                }
+                else if((IRregister & (1 << IRonderrechts)) && (IRregister & (1 << IRonderlinks)))
+                {
+                    //toestandvolgen = 7;
+                }
+                break;
+            case 6:
+                //Motoren naar links
+                h_bridgeR_set_percentage(snelheidzacht);
+                h_bridgeL_set_percentage(snelheidhard);
+                if(((IRregister & (1 << IRonderrechts)) == 0) && ((IRregister & (1 << IRonderlinks)) == 0))
+                {
+                    toestandvolgen = 4;
+                }
+                else if((IRregister & (1 << IRonderrechts)) && (IRregister & (1 << IRonderlinks)))
+                {
+                    //toestandvolgen = 7;
+                }
+                break;
+            }
         }
     }
 
@@ -281,13 +397,9 @@ void init()
     //knoppen
 	DDRF &= ~(1<<Noodknoppin);
 	PORTF |= (1<<Noodknoppin);   		// enAble alle knoppen voor input
-
-	//trigger ultra voor
-    Ultraregister |= (1<<Voorultrasoontrig);
-    UltraPort &= ~(1<<Voorultrasoontrig);
 }
 
-void initTimer(void){
+void initultrasoon(void){
     TCCR2A = 0;
     TCCR2B |= (1<<CS20);
     //16000000 / 256 = 62,500
@@ -310,7 +422,7 @@ int achterGetDistance(void){
 
     int Distance;
 
-    TriggerPulse();
+    achterTriggerPulse();
 
     while ((PINK & (1<<PK0)) == 0){
 
@@ -339,7 +451,7 @@ int voorGetDistance(void){
 
     int Distance;
 
-    TriggerPulse();
+    voorTriggerPulse();
 
     while ((PINF & (1<<PF7)) == 0){
 
