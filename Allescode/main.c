@@ -7,8 +7,12 @@
 #include "Bluetooth.h"
 #include "Library.h"
 
+//Aldar versiebeheer 2022
+
 int signaalteller = 0;
 volatile int count = 0;
+
+// assesment 22-6-
 
 /*
 Bluetooth getallen:
