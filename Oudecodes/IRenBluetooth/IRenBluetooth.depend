@@ -1,0 +1,4 @@
+# depslib dependency file v1.0
+1685697662 source:c:\users\aldar\onedrive\documents\github\project_agv\irenbluetooth\fuse.c
+	<avr/io.h>
+

@@ -1,0 +1,39 @@
+# depslib dependency file v1.0
+1684850804 source:d:\schoolv2\projectagv\4ultrasoon\fuse.c
+	<avr/io.h>
+
+1681241039 source:d:\schoolv2\projectagv\4ultrasoon\lcdscherm.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	"LCDscherm.h"
+
+1683657619 d:\schoolv2\projectagv\4ultrasoon\lcdscherm.h
+
+1684866686 source:d:\schoolv2\projectagv\4ultrasoon\main.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	<math.h>
+	<avr/interrupt.h>
+	"LCDscherm.h"
+
+1685096534 source:c:\users\aldar\onedrive\documents\github\project_agv\4ultrasoon\fuse.c
+	<avr/io.h>
+
+1685096534 source:c:\users\aldar\onedrive\documents\github\project_agv\4ultrasoon\lcdscherm.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	"LCDscherm.h"
+
+1685096534 c:\users\aldar\onedrive\documents\github\project_agv\4ultrasoon\lcdscherm.h
+
+1685096534 source:c:\users\aldar\onedrive\documents\github\project_agv\4ultrasoon\main.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	<math.h>
+	<avr/interrupt.h>
+	"LCDscherm.h"
+

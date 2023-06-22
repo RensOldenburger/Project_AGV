@@ -1,0 +1,97 @@
+case 0:
+wachten op connect
+miss lichtje ofzo
+
+connected met bt
+case 1:
+wachten op aan knop
+
+aan knop geklikt
+case 2:
+wachten op selecteren rijstijl
+
+uitknop geklikt
+case 3:
+terug naar case 1
+
+autonoom rijstijl gekozen
+case 4:
+rechtdoor rijden
+detecteren balken
+
+balken aan beide kanten gedetecteerd
+case 5:
+kijken of balken aan beide kanten gezien worden
+
+balk rechts niet zichtbaar
+case 6:
+motoren naar rechts
+terug naar case 5 wanneer balk rechts weer zichtbaar is
+
+balk links niet zichtbaar
+case 7:
+motoren naar links
+terug naar case 5 wanneer balk links weer zichtbaar is
+
+einde van rijstrook gedetecteerd
+case 8:
+grote bocht naar links maken
+detecteren nieuwe rijstrook
+wanneer AGV in nieuwe rijstrook gedetecteerd terug naar case 5
+
+plantenbak gedetecteerd
+case 9:
+motoren stoppen
+signaal geven
+terug naar case 5
+
+autonoom rijstijl uitgeschakeld
+case 10:
+terug naar case 2
+
+volgen rijstijl gekozen
+case 11:
+afstand ultrasoonsensoren bepalen
+
+afstand beide ultrasoon > 250
+case 12:
+motoren stil
+afstand ultrasoonsensoren bepalen
+
+afstand ultrasoon voor < 250
+case 13:
+motoren vooruit
+kijken of balken aan beide kanten gezien worden
+
+balk rechts niet zichtbaar
+case 14:
+motoren naar rechts
+terug naar case 13 wanneer balk rechts weer zichtbaar is
+
+balk links niet zichtbaar
+case 15:
+motoren naar links
+terug naar case 13 wanneer balk links weer zichtbaar is
+
+afstand ultrasoon achter < 250
+case 16:
+motoren achteruit
+kijken of balken aan beide kanten gezien worden
+
+balk rechts niet zichtbaar
+case 17:
+motoren naar rechts
+terug naar case 13 wanneer balk rechts weer zichtbaar is
+
+balk links niet zichtbaar
+case 18:
+motoren naar links
+terug naar case 13 wanneer balk links weer zichtbaar is
+
+volgen rijstijl uitgeschakeld
+case 19:
+terug naar case 2
+
+noodstop ingedrukt
+case 99:
+noodtoestand!!!

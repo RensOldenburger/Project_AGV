@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1685824458 source:c:\users\aldar\onedrive\documents\github\project_agv\plantendetecteren\main.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	<math.h>
+	<avr/interrupt.h>
+
+1685821177 source:c:\users\aldar\onedrive\documents\github\project_agv\plantendetecteren\fuse.c
+	<avr/io.h>
+

@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1685622171 source:c:\users\aldar\onedrive\documents\github\project_agv\irtussendelijnenv1\fuse.c
+	<avr/io.h>
+
+1685096536 source:c:\users\aldar\onedrive\documents\github\project_agv\irtussendelijnenv1\lcdscherm.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	"LCDscherm.h"
+
+1685096537 c:\users\aldar\onedrive\documents\github\project_agv\irtussendelijnenv1\lcdscherm.h
+

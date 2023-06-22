@@ -1,0 +1,19 @@
+# depslib dependency file v1.0
+1685620938 source:c:\users\rensh\documents\mijnprojecten\code\detecteren_ir\fuse.c
+	<avr/io.h>
+
+1685625136 source:c:\users\rensh\documents\mijnprojecten\code\detecteren_ir\detectiefunctiesv1.0.c
+	<avr/io.h>
+	<util/delay.h>
+
+1685625218 source:c:\users\rensh\documents\mijnprojecten\code\detecteren_ir\main.c
+	<avr/io.h>
+	<util/delay.h>
+
+1685646787 source:c:\users\aldar\onedrive\documents\github\project_agv\detecteren_ir\fuse.c
+	<avr/io.h>
+
+1685646787 source:c:\users\aldar\onedrive\documents\github\project_agv\detecteren_ir\main.c
+	<avr/io.h>
+	<util/delay.h>
+

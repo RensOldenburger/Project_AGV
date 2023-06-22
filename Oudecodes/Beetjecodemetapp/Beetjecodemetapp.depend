@@ -1,0 +1,61 @@
+# depslib dependency file v1.0
+1687163092 source:d:\schoolv2\projectagv\beetjecodemetapp\main.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	<math.h>
+	<avr/interrupt.h>
+	"Bluetooth.h"
+	"Library.h"
+
+1684947704 d:\schoolv2\projectagv\beetjecodemetapp\lcdenbluetooth.h
+
+1685909213 source:d:\schoolv2\projectagv\beetjecodemetapp\fuse.c
+	<avr/io.h>
+
+1684947704 source:d:\schoolv2\projectagv\beetjecodemetapp\lcdenbluetooth.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	<avr/interrupt.h>
+	"LCDenBluetooth.h"
+
+1685916813 source:d:\schoolv2\projectagv\beetjecodemetapp\bluetooth.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	<avr/interrupt.h>
+	"Bluetooth.h"
+
+1685916813 d:\schoolv2\projectagv\beetjecodemetapp\bluetooth.h
+
+1687162922 d:\schoolv2\projectagv\beetjecodemetapp\library.h
+
+1686217722 source:d:\schoolv2\projectagv\beetjecodemetapp\library.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	<avr/interrupt.h>
+	"Library.h"
+
+1687260728 source:c:\users\rensh\documents\github\project_agv\oudecodes\beetjecodemetapp\bluetooth.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	<avr/interrupt.h>
+	"Bluetooth.h"
+
+1687260728 c:\users\rensh\documents\github\project_agv\oudecodes\beetjecodemetapp\bluetooth.h
+
+1687260728 source:c:\users\rensh\documents\github\project_agv\oudecodes\beetjecodemetapp\fuse.c
+	<avr/io.h>
+
+1687260728 source:c:\users\rensh\documents\github\project_agv\oudecodes\beetjecodemetapp\library.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	<avr/interrupt.h>
+	"Library.h"
+
+1687260728 c:\users\rensh\documents\github\project_agv\oudecodes\beetjecodemetapp\library.h
+

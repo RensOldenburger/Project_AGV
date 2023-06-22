@@ -1,0 +1,20 @@
+# depslib dependency file v1.0
+1685453418 source:c:\users\aldar\onedrive\documents\github\project_agv\tweeultrasoon\fuse.c
+	<avr/io.h>
+
+1681241039 source:c:\users\aldar\onedrive\documents\github\project_agv\tweeultrasoon\lcdscherm.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	"LCDscherm.h"
+
+1683657619 c:\users\aldar\onedrive\documents\github\project_agv\tweeultrasoon\lcdscherm.h
+
+1685959303 source:c:\users\aldar\onedrive\documents\github\project_agv\tweeultrasoon\main.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	<math.h>
+	<avr/interrupt.h>
+	"LCDscherm.h"
+
