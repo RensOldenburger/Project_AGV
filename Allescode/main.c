@@ -10,6 +10,8 @@
 int signaalteller = 0;
 volatile int count = 0;
 
+// assesment 22-6-
+
 /*
 Bluetooth getallen:
 1: Bluetooth verbonden
