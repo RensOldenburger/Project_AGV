@@ -198,6 +198,7 @@ onderste is de rechterwiel
                     /*
                     h_bridger_set_percentage(20);
                     h_bridgel_set_percentage(5);
+                    yolo
                     */
                 }
                 else if((lengterechts <= 70) && (lengterechts >= 0))

@@ -9,3 +9,6 @@
 	<math.h>
 	<avr/interrupt.h>
 
+1687417065 source:c:\users\yoeri\onedrive\documenten\github\project_agv\oudecodes\bocht_maken\fuse.c
+	<avr/io.h>
+
