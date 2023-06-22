@@ -3,6 +3,7 @@ LCD_Naar_Locatie(x, y); verandert waar je iets neerzet op het scherm(waar de cur
 Stuur_LCD_String("x"); hiermee kan je teksten neerzetten op de plek van de cursor
 LCD_Scherm_Leeg(); hiermee maak je het scherm leeg
 itoa(variabele, array, 10); hiermee kan je variabelen omzetten naar strings -- moet je een array voor maken -- 10 is voor decimaal
+2023 assessment versiebeheer
 */
 
 #include <avr/io.h>

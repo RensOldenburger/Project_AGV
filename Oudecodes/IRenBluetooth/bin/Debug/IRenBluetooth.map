@@ -564,25 +564,25 @@ END GROUP
  *(.debug_addr)
 
 .debug_line_str
-                0x0000000000000000      0x11c
+                0x0000000000000000      0x151
  *(.debug_line_str)
  .debug_line_str
                 0x0000000000000000       0x87 obj\Debug\fuse.o
                                          0xd8 (size before relaxing)
  .debug_line_str
-                0x0000000000000087       0x42 obj\Debug\main.o
-                                         0xd6 (size before relaxing)
+                0x0000000000000087       0x77 obj\Debug\main.o
+                                         0xba (size before relaxing)
  .debug_line_str
-                0x00000000000000c9       0x53 c:/program files (x86)/avr-gcc-12.0.1/bin/../lib/gcc/avr/12.1.0/avr6\libgcc.a(_divmodsi4.o)
+                0x00000000000000fe       0x53 c:/program files (x86)/avr-gcc-12.0.1/bin/../lib/gcc/avr/12.1.0/avr6\libgcc.a(_divmodsi4.o)
                                          0x5f (size before relaxing)
  .debug_line_str
-                0x000000000000011c       0x5f c:/program files (x86)/avr-gcc-12.0.1/bin/../lib/gcc/avr/12.1.0/avr6\libgcc.a(_negsi2.o)
+                0x0000000000000151       0x5f c:/program files (x86)/avr-gcc-12.0.1/bin/../lib/gcc/avr/12.1.0/avr6\libgcc.a(_negsi2.o)
  .debug_line_str
-                0x000000000000011c       0x5f c:/program files (x86)/avr-gcc-12.0.1/bin/../lib/gcc/avr/12.1.0/avr6\libgcc.a(_exit.o)
+                0x0000000000000151       0x5f c:/program files (x86)/avr-gcc-12.0.1/bin/../lib/gcc/avr/12.1.0/avr6\libgcc.a(_exit.o)
  .debug_line_str
-                0x000000000000011c       0x5f c:/program files (x86)/avr-gcc-12.0.1/bin/../lib/gcc/avr/12.1.0/avr6\libgcc.a(_clear_bss.o)
+                0x0000000000000151       0x5f c:/program files (x86)/avr-gcc-12.0.1/bin/../lib/gcc/avr/12.1.0/avr6\libgcc.a(_clear_bss.o)
  .debug_line_str
-                0x000000000000011c       0x5f c:/program files (x86)/avr-gcc-12.0.1/bin/../lib/gcc/avr/12.1.0/avr6\libgcc.a(_udivmodsi4.o)
+                0x0000000000000151       0x5f c:/program files (x86)/avr-gcc-12.0.1/bin/../lib/gcc/avr/12.1.0/avr6\libgcc.a(_udivmodsi4.o)
 
 .debug_loclists
  *(.debug_loclists)
