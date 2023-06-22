@@ -29,3 +29,24 @@
 	"Bluetooth.h"
 	"Library.h"
 
+1687333811 source:c:\users\rensh\documents\github\project_agv\allescode\bluetooth.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	<avr/interrupt.h>
+	"Bluetooth.h"
+
+1687333811 c:\users\rensh\documents\github\project_agv\allescode\bluetooth.h
+
+1687333811 source:c:\users\rensh\documents\github\project_agv\allescode\fuse.c
+	<avr/io.h>
+
+1687361620 source:c:\users\rensh\documents\github\project_agv\allescode\library.c
+	<avr/io.h>
+	<util/delay.h>
+	<stdlib.h>
+	<avr/interrupt.h>
+	"Library.h"
+
+1687361620 c:\users\rensh\documents\github\project_agv\allescode\library.h
+
